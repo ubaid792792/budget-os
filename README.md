@@ -27,7 +27,7 @@ service cloud.firestore {
 }
 ```
 
-> **Security note:** anonymous sign-in is open to anyone who has your Firebase config. The config sits in the app's page source if you hard-code it, so anyone who finds your site could read and write your data. To limit this, paste the config into the app's setup screen instead of editing the file (it is then kept only in your browser), and don't share your Pages link. For real protection, switch to Google sign-in and restrict the rules to your own uid.
+> **Security note:** anonymous sign-in is open to anyone, and the Firebase config is visible in the page source. What protects your data is the passcode: it decides the secret path your data lives under, and the rules only allow access to that exact path (collection listing is not possible). Choose a passcode that is hard to guess, and don't share the link. For stronger protection, switch to Google sign-in and restrict the rules to your own uid.
 
 ## 5. Get your `firebaseConfig`
 **Project settings (gear icon) → General → Your apps → Web (`</>`) → register the app (skip Hosting) → copy the `firebaseConfig` block.**
@@ -38,13 +38,13 @@ service cloud.firestore {
 3. **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch `main`, folder `/ (root)` → Save.**
 4. Wait about a minute. Your link will be `https://USERNAME.github.io/budget-app/`.
 
-## 7. Connect Firebase on first open
-1. Open your link. The **Setup Firebase to Enable Sync** screen appears.
-2. Paste the whole `firebaseConfig` block into the top box (the six fields fill automatically) or type them in.
-3. Click **Save & Reload**. The header bar should change to **Synced ✓**.
-4. Repeat this once on every device. Later you can use **Data Manager → ☁ Cloud Sync** (or tap the status bar) to change or disconnect.
+## 7. Connect each device (passcode, no keys to copy)
+The Firebase config is already built into `index.html` (a web config identifies the project; it is not a password). Your data is protected by a **sync passcode** you choose:
+1. Open the app. The **Sync across your devices** screen appears. Type a passcode (8+ characters, a short phrase like `blue-tiger-river-42` is fine) and tap **Save & connect**.
+2. Your data is stored under an unguessable path derived from the passcode, so only devices that know it can read or write it.
+3. On your other devices, open the app and type the same passcode, **or** tap the status bar → **Copy link / Share…** and open that link on the phone. The link contains the passcode, so send it only to yourself.
 
-Optional: you can instead paste the values into `const firebaseConfig` near the top of the script in `index.html`. A config saved in the browser takes priority over it.
+To use your own Firebase project instead, tap **Advanced: use my own Firebase project** on that screen, or edit `firebaseConfig` near the top of the script.
 
 ## 8. Test the sync
 1. Open the link on your laptop and on your phone.

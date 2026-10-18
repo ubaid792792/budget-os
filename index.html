@@ -411,6 +411,22 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
   </div>
 </div>
 
+<div id="syncOvl" class="fbovl hidden"><div class="fbbox">
+  <h3 style="font-weight:600;font-size:1.15rem;margin-bottom:.25rem">Sync across your devices</h3>
+  <p style="font-size:.8rem;color:#64748b;margin-bottom:.9rem">Pick one passcode (8+ characters, a short phrase is fine) and enter the same one on every device. Your data is stored under it, so keep it private.</p>
+  <label class="lbl" for="syncCode">Sync passcode</label>
+  <input id="syncCode" class="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. blue-tiger-river-42" style="margin-bottom:.4rem">
+  <p id="syncErr" style="color:#f43f5e;font-size:.8rem;min-height:1rem;margin-bottom:.5rem"></p>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem"><button id="syncSave" class="btn-p" style="flex:1">Save &amp; connect</button><button id="syncSkip" class="btn-s">Use on this device only</button></div>
+  <div id="syncShare" class="hidden" style="border-top:1px solid #e2e8f0;padding-top:1rem">
+    <label class="lbl" for="syncLink">Link for your other devices</label>
+    <input id="syncLink" class="inp" readonly style="margin-bottom:.5rem">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem"><button id="syncCopy" class="btn-s">Copy link</button><button id="syncShareBtn" class="btn-s">Share…</button><button id="syncOff" class="btn-d">Disconnect</button></div>
+    <p style="font-size:.75rem;color:#94a3b8">Open the link on your phone (send it via WhatsApp, email or a note). It contains your passcode, so share it only with yourself.</p>
+  </div>
+  <button id="syncAdv" type="button" style="margin-top:1rem;font-size:.75rem;color:#94a3b8;text-decoration:underline">Advanced: use my own Firebase project</button>
+</div></div>
+
 <div id="fbOvl" class="fbovl hidden"><div class="fbbox">
   <h3 style="font-weight:600;font-size:1.15rem;margin-bottom:.25rem">Setup Firebase to Enable Sync</h3>
   <p style="font-size:.8rem;color:#64748b;margin-bottom:.9rem">Paste your Firebase web-app config to sync across devices. Stored only in this browser. Skip it to keep everything local.</p>
@@ -428,14 +444,38 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 'use strict';
 /* ===== FIREBASE CONFIG: paste yours here, or leave as-is and paste it in the setup screen on first open ===== */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "AIzaSyCbkkseDKZSetdS24VF5ncZV0NIaIisEaU",
+  authDomain: "budget-os-ubaid.firebaseapp.com",
+  projectId: "budget-os-ubaid",
+  storageBucket: "budget-os-ubaid.firebasestorage.app",
+  messagingSenderId: "256195112195",
+  appId: "1:256195112195:web:3e7dccb157dd5fb0620d36"
 };
-const APP_ID = "budget_app_main_v1"; // isolates this app's data inside Firestore
+// A Firebase web config is an identifier, not a secret. Your DATA is protected by the sync passcode below:
+// data lives under an unguessable path derived from it, so only devices that know the passcode can reach it.
+function sha256(str) {
+  const b = unescape(encodeURIComponent(str)), isP = n => { for (let d = 2; d * d <= n; d++) if (n % d == 0) return 0; return 1; };
+  const K = [], H0 = []; for (let n = 2; K.length < 64; n++) if (isP(n)) { K.push(Math.floor(Math.cbrt(n) % 1 * 4294967296) >>> 0); if (H0.length < 8) H0.push(Math.floor(Math.sqrt(n) % 1 * 4294967296) >>> 0); }
+  const m = []; for (let i = 0; i < b.length; i++) m.push(b.charCodeAt(i));
+  const bits = m.length * 8; m.push(0x80); while (m.length % 64 !== 56) m.push(0);
+  for (let i = 7; i >= 0; i--) m.push(i > 3 ? 0 : (bits >>> (i * 8)) & 255);
+  const rr = (x, n) => (x >>> n) | (x << (32 - n)); let H = H0.slice();
+  for (let o = 0; o < m.length; o += 64) {
+    const w = []; for (let i = 0; i < 16; i++) w[i] = ((m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3]) >>> 0;
+    for (let i = 16; i < 64; i++) { const s0 = rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ (w[i - 15] >>> 3), s1 = rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ (w[i - 2] >>> 10); w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0; }
+    let [a, bb, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) { const t1 = (h + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) >>> 0, t2 = ((rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & bb) ^ (a & c) ^ (bb & c))) >>> 0; h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = bb; bb = a; a = (t1 + t2) >>> 0; }
+    H = [H[0] + a, H[1] + bb, H[2] + c, H[3] + d, H[4] + e, H[5] + f, H[6] + g, H[7] + h].map(x => x >>> 0);
+  }
+  return H.map(x => x.toString(16).padStart(8, '0')).join('');
+}
+// Sync passcode: type it once per device, or open a share link ...#code=<passcode>. No passcode = local-only.
+try {
+  const m = location.hash.match(/[#&]code=([^&]+)/);
+  if (m) { localStorage.setItem('finance_sync_code', decodeURIComponent(m[1])); localStorage.removeItem('finance_firebase_skip'); history.replaceState(null, '', location.pathname + location.search); }
+} catch (e) {}
+let syncCode = ''; try { syncCode = localStorage.getItem('finance_sync_code') || ''; } catch (e) {}
+const APP_ID = syncCode ? "b_" + sha256(syncCode).slice(0, 32) : ""; // isolates this app's data inside Firestore (derived from your passcode)
 let activeCfg = null; // config saved by the setup screen wins over the one above
 try { const c = JSON.parse(localStorage.getItem('finance_firebase_config')); if (c && c.apiKey && c.apiKey !== 'YOUR_API_KEY') activeCfg = c; } catch (e) {}
 // Private setup link: https://.../index.html#cfg=<base64 of the config JSON>. Saved in this browser, then removed from the address bar.
@@ -447,8 +487,8 @@ try {
     history.replaceState(null, '', location.pathname + location.search);
   }
 } catch (e) {}
-addEventListener('hashchange', () => { if (/[#&]cfg=/.test(location.hash)) location.reload(); });
-if (!activeCfg && firebaseConfig.apiKey !== 'YOUR_API_KEY') activeCfg = firebaseConfig;
+addEventListener('hashchange', () => { if (/[#&](cfg|code)=/.test(location.hash)) location.reload(); });
+if (!activeCfg) activeCfg = firebaseConfig;
 /* ========= helpers ========= */
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -986,7 +1026,7 @@ const canon = v => Array.isArray(v) ? '[' + v.map(canon).join(',') + ']' : v && 
 const ago = ts => { if (!ts) return 'never'; const m = Math.floor((Date.now() - ts) / 6e4); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.floor(m / 60) + ' h ago' : Math.floor(m / 1440) + ' d ago'; };
 function setStatus() {
   const bar = $('#syncBar'); let st, txt;
-  if (!cloud.on) { st = 'none'; txt = 'No Firebase Config - Local Only'; }
+  if (!cloud.on) { st = 'none'; txt = 'Local Only - sync not set up'; }
   else if (!navigator.onLine || cloud.err) { st = 'off'; txt = 'Offline - Saved Locally'; }
   else if (!cloud.last || cloud.pending || !cloud.eReady || !cloud.mReady) { st = 'busy'; txt = 'Syncing...'; }
   else { st = 'ok'; txt = 'Synced ✓'; }
@@ -1045,8 +1085,8 @@ function cloudOnMeta(d, fromCache, pending) {
   touch(fromCache, pending);
 }
 // the module script at the bottom talks to the app through this object
-window.__cloud = { cfg: activeCfg, appId: APP_ID, api: null, start: null, onEntries: cloudOnEntries, onMeta: cloudOnMeta, onError: cloudErr };
-const cloud = { on: !!activeCfg, api: null, eReady: false, mReady: false, eMap: new Map(), metaStr: '', pending: false, err: false, last: +load('finance_last_sync', 0) };
+window.__cloud = { cfg: (activeCfg && APP_ID) ? activeCfg : null, appId: APP_ID, api: null, start: null, onEntries: cloudOnEntries, onMeta: cloudOnMeta, onError: cloudErr };
+const cloud = { on: !!(activeCfg && APP_ID), api: null, eReady: false, mReady: false, eMap: new Map(), metaStr: '', pending: false, err: false, last: +load('finance_last_sync', 0) };
 Object.defineProperty(window.__cloud, 'api', { get: () => cloud.api, set: v => { cloud.api = v; } });
 function cloudStart() {
   if (!cloud.on || cloud.api || cloud.starting || !window.__cloud.start) return;
@@ -1055,9 +1095,34 @@ function cloudStart() {
 addEventListener('cloud-ready', cloudStart);
 addEventListener('online', () => { cloud.err = false; cloudStart(); setStatus(); }); addEventListener('offline', setStatus);
 setInterval(setStatus, 30000);
-$('#syncBar').onclick = () => openFb(false);
+$('#syncBar').onclick = () => openSync();
 
-/* setup modal */
+/* passcode sync screen */
+function openSync() {
+  const on = !!APP_ID; $('#syncCode').value = on ? syncCode : ''; $('#syncErr').textContent = '';
+  $('#syncShare').classList.toggle('hidden', !on);
+  $('#syncLink').value = on ? location.origin + location.pathname + '#code=' + encodeURIComponent(syncCode) : '';
+  $('#syncSave').textContent = on ? 'Change passcode' : 'Save & connect';
+  $('#syncSkip').textContent = on ? 'Close' : 'Use on this device only';
+  $('#syncOvl').classList.remove('hidden');
+}
+$('#syncSkip').onclick = () => { if (!APP_ID) try { localStorage.setItem('finance_firebase_skip', '1'); } catch (e) {} $('#syncOvl').classList.add('hidden'); };
+$('#syncSave').onclick = () => {
+  const c = $('#syncCode').value.trim();
+  if (c.length < 8) return $('#syncErr').textContent = 'Use at least 8 characters (a short phrase works well).';
+  try { localStorage.setItem('finance_sync_code', c); localStorage.removeItem('finance_firebase_skip'); } catch (e) { return $('#syncErr').textContent = 'Could not save in this browser'; }
+  location.reload();
+};
+$('#syncCode').onkeydown = e => { if (e.key === 'Enter') $('#syncSave').click(); };
+$('#syncCopy').onclick = async () => { const l = $('#syncLink').value; try { await navigator.clipboard.writeText(l); } catch (e) { $('#syncLink').select(); document.execCommand('copy'); } toast('Link copied - send it to your other device'); };
+$('#syncShareBtn').onclick = async () => { const l = $('#syncLink').value; if (navigator.share) { try { await navigator.share({ title: 'Budget OS', text: 'Open this on your other device to sync', url: l }); } catch (e) {} } else $('#syncCopy').click(); };
+$('#syncOff').onclick = async () => {
+  if (!(await confirmYes('Disconnect sync?', 'This device keeps its local data and stops syncing. Cloud data is not deleted.', 'Disconnect'))) return;
+  ['finance_sync_code', 'finance_cloud_seeded_e', 'finance_cloud_seeded_m', 'finance_last_sync'].forEach(k => localStorage.removeItem(k)); localStorage.setItem('finance_firebase_skip', '1'); location.reload();
+};
+$('#syncAdv').onclick = () => { $('#syncOvl').classList.add('hidden'); openFb(false); };
+
+/* advanced: custom Firebase project */
 function openFb(first) {
   const c = activeCfg || {}; FBK.forEach(k => $('#fb_' + k).value = c[k] || '');
   $('#fbPaste').value = ''; $('#fbOff').classList.toggle('hidden', !activeCfg); $('#fbSkip').textContent = activeCfg ? 'Close' : 'Use local only';
@@ -1077,9 +1142,9 @@ $('#fbOff').onclick = async () => {
   ['finance_firebase_config', 'finance_cloud_seeded_e', 'finance_cloud_seeded_m', 'finance_last_sync'].forEach(k => localStorage.removeItem(k)); localStorage.setItem('finance_firebase_skip', '1'); location.reload();
 };
 
-$('#fbOpen').onclick = () => openFb(false);
+$('#fbOpen').onclick = () => openSync();
 applyThemeBtn(); autoBackup(); renderAll(); setStatus();
-if (!activeCfg && !localStorage.getItem('finance_firebase_skip')) openFb(true);
+if (!APP_ID && !localStorage.getItem('finance_firebase_skip')) openSync();
 
 </script>
 <script type="module">
