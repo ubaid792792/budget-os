@@ -328,7 +328,7 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
   <!-- Budgets -->
   <section class="card">
     <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
-      <div><h2 class="font-semibold">Budget Limits</h2><p class="text-xs text-slate-400">Optional. No limit set = unlimited.</p></div>
+      <div><h2 class="font-semibold">Budget Limits</h2><p class="text-xs text-slate-400">Optional. No limit set = unlimited. Drag ⠿ or use ▲▼ to put categories in your own order.</p></div>
       <form id="budForm" class="flex flex-wrap gap-2 w-full sm:w-auto">
         <select id="budCat" class="inp sm:!w-44 flex-1 min-w-[8rem]"></select>
         <input id="budAmt" type="number" min="1" step="any" inputmode="decimal" placeholder="Limit (PKR)" class="inp sm:!w-36 flex-1 min-w-[8rem]">
@@ -422,7 +422,7 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 
 <div id="toasts" class="fixed z-[60] left-1/2 -translate-x-1/2 bottom-24 sm:bottom-6 flex flex-col gap-2 items-center w-[92vw] max-w-sm pointer-events-none"></div>
 
-<style>.syncbar{display:flex;align-items:center;gap:.5rem;width:100%;max-width:72rem;margin:0 auto;padding:0 1rem .4rem;font-size:.7rem;color:#64748b;text-align:left}.syncbar i{width:.5rem;height:.5rem;border-radius:50%;background:#94a3b8;flex:none}.syncbar[data-st=ok] i{background:#10b981}.syncbar[data-st=busy] i{background:#f59e0b}.syncbar[data-st=off] i{background:#f43f5e}.fbovl{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;background:#f8fafc;overflow-y:auto;padding:1.25rem 1rem}.dark .fbovl{background:#020617}.fbovl.hidden{display:none}.fbbox{width:100%;max-width:30rem;margin:auto}.mini{font-size:.75rem;padding:.25rem .55rem;border-radius:.5rem;background:#f1f5f9;color:#334155}.mini:hover{background:#e2e8f0}.dark .mini{background:#1e293b;color:#e2e8f0}.dark .mini:hover{background:#334155}.mini.danger{background:#fff1f2;color:#e11d48}.dark .mini.danger{background:rgba(244,63,94,.12);color:#fda4af}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:.85rem}.empty.hidden{display:none}.seg.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}.dark .seg.on{background:#334155}</style>
+<style>.syncbar{display:flex;align-items:center;gap:.5rem;width:100%;max-width:72rem;margin:0 auto;padding:0 1rem .4rem;font-size:.7rem;color:#64748b;text-align:left}.syncbar i{width:.5rem;height:.5rem;border-radius:50%;background:#94a3b8;flex:none}.syncbar[data-st=ok] i{background:#10b981}.syncbar[data-st=busy] i{background:#f59e0b}.syncbar[data-st=off] i{background:#f43f5e}.fbovl{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;background:#f8fafc;overflow-y:auto;padding:1.25rem 1rem}.dark .fbovl{background:#020617}.fbovl.hidden{display:none}.fbbox{width:100%;max-width:30rem;margin:auto}.catcard.dragging{opacity:.4}.catcard.dragover{outline:2px dashed #10b981;outline-offset:2px}.draghandle{cursor:grab;color:#94a3b8;padding:0 .25rem;user-select:none}.mini{font-size:.75rem;padding:.25rem .55rem;border-radius:.5rem;background:#f1f5f9;color:#334155}.mini:hover{background:#e2e8f0}.dark .mini{background:#1e293b;color:#e2e8f0}.dark .mini:hover{background:#334155}.mini.danger{background:#fff1f2;color:#e11d48}.dark .mini.danger{background:rgba(244,63,94,.12);color:#fda4af}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:.85rem}.empty.hidden{display:none}.seg.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}.dark .seg.on{background:#334155}</style>
 
 <script>
 'use strict';
@@ -736,7 +736,7 @@ function renderBudgetUI() {
   inMonth(cur).filter(e => e.type === 'expense').forEach(e => spent[e.category] = (spent[e.category] || 0) + e.amount);
   const sel = $('#budCat'), keep = sel.value;
   sel.innerHTML = categories.map(c => `<option ${c === (editBud || keep) ? 'selected' : ''}>${esc(c)}</option>`).join('');
-  const order = categories.slice().sort((a, b) => (b in budgets) - (a in budgets));
+  const order = categories; // custom order, set by the user (drag or ▲▼)
   $('#budList').innerHTML = order.map(c => {
     const s = spent[c] || 0, lim = budgets[c], has = lim != null;
     let body;
@@ -746,17 +746,29 @@ function renderBudgetUI() {
       body = `<div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"><div class="h-full ${col} transition-all" style="width:${Math.min(100, p)}%"></div></div>
         <div class="flex justify-between text-xs mt-1.5"><span class="${s > lim ? 'text-rose-500 font-medium' : 'text-slate-500'}">${s > lim ? 'Overspent by ' + fmt(s - lim) : fmt(lim - s) + ' left of ' + fmt(lim)}</span><span class="text-slate-400">${p.toFixed(0)}%</span></div>`;
     }
-    return `<div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3"><div class="mb-2"><span class="text-sm font-medium truncate" style="display:block">${esc(c)}</span>
+    return `<div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3 catcard" draggable="true" data-cat="${esc(c)}"><div class="mb-2" style="display:flex;align-items:center;gap:.25rem"><span class="draghandle" title="Drag to reorder">⠿</span><span class="text-sm font-medium truncate" style="flex:1;min-width:0">${esc(c)}</span><button class="mini" data-up="${esc(c)}" title="Move up" aria-label="Move ${esc(c)} up">▲</button><button class="mini" data-dn="${esc(c)}" title="Move down" aria-label="Move ${esc(c)} down">▼</button>
       </div><div class="flex flex-wrap gap-1 mb-2"><button class="mini" data-bedit="${esc(c)}">${has ? 'Edit limit' : 'Set limit'}</button>${has ? `<button class="mini" data-bdel="${esc(c)}">Remove limit</button>` : ''}<button class="mini" data-crn="${esc(c)}">Rename</button><button class="mini danger" data-cdl="${esc(c)}">Delete</button></div>${body}</div>`;
   }).join('');
 }
 $('#budList').onclick = async e => {
   const ed = e.target.closest('[data-bedit]'), dl = e.target.closest('[data-bdel]');
   if (ed) { editBud = ed.dataset.bedit; $('#budCat').value = editBud; $('#budAmt').value = budgets[editBud]; $('#budBtn').textContent = 'Update'; $('#budCancel').classList.remove('hidden'); $('#budAmt').focus(); }
+  const up = e.target.closest('[data-up]'), dn = e.target.closest('[data-dn]');
+  if (up || dn) { const c = (up || dn).dataset[up ? 'up' : 'dn'], i = categories.indexOf(c); return moveCat(c, up ? i - 1 : i + 1); }
   if (e.target.closest('[data-crn]')) return renameCat(e.target.closest('[data-crn]').dataset.crn);
   if (e.target.closest('[data-cdl]')) return deleteCat(e.target.closest('[data-cdl]').dataset.cdl);
   if (dl) { const c = dl.dataset.bdel; if (await confirmYes('Delete budget?', `Remove the limit for ${c}? It becomes unlimited.`)) { delete budgets[c]; persist(); renderBudgetUI(); toast('Budget removed'); } }
 };
+function moveCat(c, to) {
+  const i = categories.indexOf(c); if (i < 0 || to < 0 || to >= categories.length || to === i) return;
+  categories.splice(i, 1); categories.splice(to, 0, c); persist(); renderAll();
+  const el = [...document.querySelectorAll('.catcard')].find(x => x.dataset.cat === c); if (el) el.scrollIntoView({ block: 'nearest' });
+}
+let dragCat = null;
+$('#budList').addEventListener('dragstart', e => { const c = e.target.closest('.catcard'); if (!c) return; dragCat = c.dataset.cat; c.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragCat); } catch (x) {} });
+$('#budList').addEventListener('dragend', () => { dragCat = null; document.querySelectorAll('.catcard').forEach(x => x.classList.remove('dragging', 'dragover')); });
+$('#budList').addEventListener('dragover', e => { if (!dragCat) return; e.preventDefault(); document.querySelectorAll('.catcard.dragover').forEach(x => x.classList.remove('dragover')); const t = e.target.closest('.catcard'); if (t && t.dataset.cat !== dragCat) t.classList.add('dragover'); });
+$('#budList').addEventListener('drop', e => { if (!dragCat) return; e.preventDefault(); const t = e.target.closest('.catcard'); const from = dragCat; dragCat = null; if (t && t.dataset.cat !== from) moveCat(from, categories.indexOf(t.dataset.cat)); });
 function resetBudForm() { editBud = null; $('#budAmt').value = ''; $('#budBtn').textContent = 'Set'; $('#budCancel').classList.add('hidden'); }
 $('#budCancel').onclick = () => { resetBudForm(); renderBudgetUI(); };
 $('#budForm').onsubmit = e => {
