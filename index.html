@@ -447,6 +447,7 @@ try {
     history.replaceState(null, '', location.pathname + location.search);
   }
 } catch (e) {}
+addEventListener('hashchange', () => { if (/[#&]cfg=/.test(location.hash)) location.reload(); });
 if (!activeCfg && firebaseConfig.apiKey !== 'YOUR_API_KEY') activeCfg = firebaseConfig;
 /* ========= helpers ========= */
 const $ = (s, r = document) => r.querySelector(s);
