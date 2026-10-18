@@ -27,7 +27,7 @@ service cloud.firestore {
 }
 ```
 
-> **Security note:** anonymous sign-in is open to anyone, and the Firebase config is visible in the page source. What protects your data is the passcode: it decides the secret path your data lives under, and the rules only allow access to that exact path (collection listing is not possible). Choose a passcode that is hard to guess, and don't share the link. For stronger protection, switch to Google sign-in and restrict the rules to your own uid.
+> **Security note:** anonymous sign-in is open to anyone, and the Firebase config is visible in the page source. What protects your data is the passcode: it decides the secret path your data lives under, and the rules only allow access to that exact path (collection listing is not possible). A 6-digit code has only a million combinations, so avoid obvious numbers (123456, your birth year) and don't share the link. It is fine against casual access but not against a determined attacker. For stronger protection, switch to Google sign-in and restrict the rules to your own uid.
 
 ## 5. Get your `firebaseConfig`
 **Project settings (gear icon) → General → Your apps → Web (`</>`) → register the app (skip Hosting) → copy the `firebaseConfig` block.**
@@ -40,7 +40,7 @@ service cloud.firestore {
 
 ## 7. Connect each device (passcode, no keys to copy)
 The Firebase config is already built into `index.html` (a web config identifies the project; it is not a password). Your data is protected by a **sync passcode** you choose:
-1. Open the app. The **Sync across your devices** screen appears. Type a passcode (8+ characters, a short phrase like `blue-tiger-river-42` is fine) and tap **Save & connect**.
+1. Open the app. The **Sync across your devices** screen appears. Type a 6-digit passcode (numbers only) and tap **Save & connect**.
 2. Your data is stored under an unguessable path derived from the passcode, so only devices that know it can read or write it.
 3. On your other devices, open the app and type the same passcode, **or** tap the status bar → **Copy link / Share…** and open that link on the phone. The link contains the passcode, so send it only to yourself.
 

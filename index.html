@@ -413,9 +413,9 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 
 <div id="syncOvl" class="fbovl hidden"><div class="fbbox">
   <h3 style="font-weight:600;font-size:1.15rem;margin-bottom:.25rem">Sync across your devices</h3>
-  <p style="font-size:.8rem;color:#64748b;margin-bottom:.9rem">Pick one passcode (8+ characters, a short phrase is fine) and enter the same one on every device. Your data is stored under it, so keep it private.</p>
+  <p style="font-size:.8rem;color:#64748b;margin-bottom:.9rem">Choose a 6-digit passcode (numbers only) and enter the same one on every device. Your data is stored under it, so keep it private and avoid obvious numbers like 123456.</p>
   <label class="lbl" for="syncCode">Sync passcode</label>
-  <input id="syncCode" class="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. blue-tiger-river-42" style="margin-bottom:.4rem">
+  <input id="syncCode" class="inp" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" spellcheck="false" placeholder="6 digits" style="margin-bottom:.4rem;letter-spacing:.3em;font-size:1.1rem">
   <p id="syncErr" style="color:#f43f5e;font-size:.8rem;min-height:1rem;margin-bottom:.5rem"></p>
   <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem"><button id="syncSave" class="btn-p" style="flex:1">Save &amp; connect</button><button id="syncSkip" class="btn-s">Use on this device only</button></div>
   <div id="syncShare" class="hidden" style="border-top:1px solid #e2e8f0;padding-top:1rem">
@@ -472,9 +472,10 @@ function sha256(str) {
 // Sync passcode: type it once per device, or open a share link ...#code=<passcode>. No passcode = local-only.
 try {
   const m = location.hash.match(/[#&]code=([^&]+)/);
-  if (m) { localStorage.setItem('finance_sync_code', decodeURIComponent(m[1])); localStorage.removeItem('finance_firebase_skip'); history.replaceState(null, '', location.pathname + location.search); }
+  if (m && /^\d{6}$/.test(decodeURIComponent(m[1]))) { localStorage.setItem('finance_sync_code', decodeURIComponent(m[1])); localStorage.removeItem('finance_firebase_skip'); history.replaceState(null, '', location.pathname + location.search); }
 } catch (e) {}
 let syncCode = ''; try { syncCode = localStorage.getItem('finance_sync_code') || ''; } catch (e) {}
+if (!/^\d{6}$/.test(syncCode)) syncCode = ''; // passcode is exactly 6 digits
 const APP_ID = syncCode ? "b_" + sha256(syncCode).slice(0, 32) : ""; // isolates this app's data inside Firestore (derived from your passcode)
 let activeCfg = null; // config saved by the setup screen wins over the one above
 try { const c = JSON.parse(localStorage.getItem('finance_firebase_config')); if (c && c.apiKey && c.apiKey !== 'YOUR_API_KEY') activeCfg = c; } catch (e) {}
@@ -1109,11 +1110,12 @@ function openSync() {
 $('#syncSkip').onclick = () => { if (!APP_ID) try { localStorage.setItem('finance_firebase_skip', '1'); } catch (e) {} $('#syncOvl').classList.add('hidden'); };
 $('#syncSave').onclick = () => {
   const c = $('#syncCode').value.trim();
-  if (c.length < 8) return $('#syncErr').textContent = 'Use at least 8 characters (a short phrase works well).';
+  if (!/^\d{6}$/.test(c)) return $('#syncErr').textContent = 'The passcode must be exactly 6 digits (numbers only).';
   try { localStorage.setItem('finance_sync_code', c); localStorage.removeItem('finance_firebase_skip'); } catch (e) { return $('#syncErr').textContent = 'Could not save in this browser'; }
   location.reload();
 };
 $('#syncCode').onkeydown = e => { if (e.key === 'Enter') $('#syncSave').click(); };
+$('#syncCode').oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6); };
 $('#syncCopy').onclick = async () => { const l = $('#syncLink').value; try { await navigator.clipboard.writeText(l); } catch (e) { $('#syncLink').select(); document.execCommand('copy'); } toast('Link copied - send it to your other device'); };
 $('#syncShareBtn').onclick = async () => { const l = $('#syncLink').value; if (navigator.share) { try { await navigator.share({ title: 'Budget OS', text: 'Open this on your other device to sync', url: l }); } catch (e) {} } else $('#syncCopy').click(); };
 $('#syncOff').onclick = async () => {
