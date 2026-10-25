@@ -294,6 +294,7 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 <main class="max-w-6xl mx-auto px-4 py-5 space-y-5">
   <!-- KPIs -->
   <section id="kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></section>
+  <section id="kpis2" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></section>
 
   <!-- Charts row 1 -->
   <section class="grid lg:grid-cols-2 gap-4">
@@ -338,6 +339,25 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
     </div>
     <form id="catForm" class="flex gap-2 mb-4"><input id="catNew" class="inp" placeholder="New category name" maxlength="40"><button class="btn-s" style="white-space:nowrap">+ Add category</button></form>
     <div id="budList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+  </section>
+
+  <!-- Zakat -->
+  <section class="card" id="zakatSec">
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+      <div><h2 class="font-semibold">🕌 Zakat</h2><p class="text-xs text-slate-400">Separate from your monthly expenses.</p></div>
+      <form id="zkForm" class="flex flex-wrap gap-2 w-full sm:w-auto"><input id="zkTarget" type="number" min="0" step="any" inputmode="decimal" class="inp sm:!w-44 flex-1 min-w-[8rem]" placeholder="Zakat target (PKR)"><button class="btn-s" style="white-space:nowrap">Set target</button><button type="button" id="zkAdd" class="btn-p" style="white-space:nowrap">+ Payment</button></form>
+    </div>
+    <div id="zakatBox"></div>
+  </section>
+
+  <!-- Loans -->
+  <section class="card" id="loanSec">
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-3">
+      <div><h2 class="font-semibold">🤝 Loans &amp; Receivables</h2><p class="text-xs text-slate-400">Money you will receive from, or must pay to, people.</p></div>
+      <form id="peopleForm" class="flex flex-wrap gap-2 w-full sm:w-auto"><input id="personNew" class="inp sm:!w-44 flex-1 min-w-[8rem]" placeholder="Add person" maxlength="40"><button class="btn-s" style="white-space:nowrap">+ Person</button><button type="button" id="loanAdd" class="btn-p" style="white-space:nowrap">+ Record</button></form>
+    </div>
+    <div id="loanSummary" class="mb-3"></div>
+    <div id="loanList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
   </section>
 
   <!-- Tags -->
@@ -436,9 +456,17 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
   <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button id="fbSave" class="btn-p" style="flex:1">Save &amp; Reload</button><button id="fbSkip" class="btn-s">Use local only</button><button id="fbOff" class="btn-d hidden">Disconnect</button></div>
 </div></div>
 
+<div id="recOvl" class="ovl closed fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center hidden">
+  <form id="recForm" class="sheet closed bg-white dark:bg-slate-900 w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl shadow-xl max-h-[92vh] overflow-y-auto p-5 space-y-4" novalidate>
+    <div class="flex items-center justify-between"><h3 id="recTitle" class="font-semibold text-lg"></h3><button type="button" id="recClose" class="btn-s !px-2.5 !py-1.5" aria-label="Close">✕</button></div>
+    <div id="recBody" class="space-y-4"></div>
+    <div class="flex gap-2 pt-1"><button type="button" id="recCancel" class="btn-s flex-1">Cancel</button><button class="btn-p flex-1">Save</button></div>
+  </form>
+</div>
+
 <div id="toasts" class="fixed z-[60] left-1/2 -translate-x-1/2 bottom-24 sm:bottom-6 flex flex-col gap-2 items-center w-[92vw] max-w-sm pointer-events-none"></div>
 
-<style>.syncbar{display:flex;align-items:center;gap:.5rem;width:100%;max-width:72rem;margin:0 auto;padding:0 1rem .4rem;font-size:.7rem;color:#64748b;text-align:left}.syncbar i{width:.5rem;height:.5rem;border-radius:50%;background:#94a3b8;flex:none}.syncbar[data-st=ok] i{background:#10b981}.syncbar[data-st=busy] i{background:#f59e0b}.syncbar[data-st=off] i{background:#f43f5e}.fbovl{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;background:#f8fafc;overflow-y:auto;padding:1.25rem 1rem}.dark .fbovl{background:#020617}.fbovl.hidden{display:none}.fbbox{width:100%;max-width:30rem;margin:auto}.catcard.dragging{opacity:.4}.catcard.dragover{outline:2px dashed #10b981;outline-offset:2px}.draghandle{cursor:grab;color:#94a3b8;padding:0 .25rem;user-select:none}.mini{font-size:.75rem;padding:.25rem .55rem;border-radius:.5rem;background:#f1f5f9;color:#334155}.mini:hover{background:#e2e8f0}.dark .mini{background:#1e293b;color:#e2e8f0}.dark .mini:hover{background:#334155}.mini.danger{background:#fff1f2;color:#e11d48}.dark .mini.danger{background:rgba(244,63,94,.12);color:#fda4af}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:.85rem}.empty.hidden{display:none}.seg.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}.dark .seg.on{background:#334155}</style>
+<style>.syncbar{display:flex;align-items:center;gap:.5rem;width:100%;max-width:72rem;margin:0 auto;padding:0 1rem .4rem;font-size:.7rem;color:#64748b;text-align:left}.syncbar i{width:.5rem;height:.5rem;border-radius:50%;background:#94a3b8;flex:none}.syncbar[data-st=ok] i{background:#10b981}.syncbar[data-st=busy] i{background:#f59e0b}.syncbar[data-st=off] i{background:#f43f5e}.fbovl{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;background:#f8fafc;overflow-y:auto;padding:1.25rem 1rem}.dark .fbovl{background:#020617}.fbovl.hidden{display:none}.fbbox{width:100%;max-width:30rem;margin:auto}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.catcard.dragging{opacity:.4}.catcard.dragover{outline:2px dashed #10b981;outline-offset:2px}.draghandle{cursor:grab;color:#94a3b8;padding:0 .25rem;user-select:none}.mini{font-size:.75rem;padding:.25rem .55rem;border-radius:.5rem;background:#f1f5f9;color:#334155}.mini:hover{background:#e2e8f0}.dark .mini{background:#1e293b;color:#e2e8f0}.dark .mini:hover{background:#334155}.mini.danger{background:#fff1f2;color:#e11d48}.dark .mini.danger{background:rgba(244,63,94,.12);color:#fda4af}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:.85rem}.empty.hidden{display:none}.seg.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}.dark .seg.on{background:#334155}</style>
 
 <script>
 'use strict';
@@ -506,7 +534,7 @@ const PAL = ['#10b981', '#8b5cf6', '#f59e0b', '#f43f5e', '#0ea5e9', '#64748b', '
 const DAY = 864e5;
 
 /* ========= state ========= */
-const DEF_CATS = ['Grocery', 'Car Maintenance', 'Mobile & Internet Packages', 'Fuel', 'Rent', 'Utilities', 'Dining Out', 'Health', 'Shopping', 'Salary', 'Other'];
+const DEF_CATS = ['Grocery', 'Car Maintenance', 'Mobile & Internet Packages', 'Fuel', 'Rent', 'Utilities', 'Dining Out', 'Health', 'Shopping', 'Zakat', 'Salary', 'Other'];
 let entries = load('finance_entries', []);
 let categories = load('finance_categories', null);
 if (!Array.isArray(categories) || !categories.length) { categories = DEF_CATS.slice(); save('finance_categories', categories); }
@@ -515,10 +543,15 @@ if (!budgets || typeof budgets !== 'object' || Array.isArray(budgets)) budgets =
 let tags = load('finance_tags', []);
 if (!Array.isArray(tags)) tags = [];
 if (!Array.isArray(entries)) entries = [];
+const normZ = z => { z = z && typeof z === 'object' ? z : {}; return { target: +z.target || 0, cat: z.cat || 'Zakat', entries: Array.isArray(z.entries) ? z.entries : [], copied: Array.isArray(z.copied) ? z.copied : [] }; };
+const byId = (a, b) => { const ids = new Set(a.map(x => x.id)); return a.concat(b.filter(x => !ids.has(x.id))); };
+let zakat = normZ(load('finance_zakat', null)), people = load('finance_people', []), loans = load('finance_loans', []);
+if (!Array.isArray(people)) people = []; if (!Array.isArray(loans)) loans = [];
+{ const zc = categories.find(c => c.toLowerCase() === 'zakat'); if (zc) zakat.cat = zakat.cat === 'Zakat' ? zc : zakat.cat; else if (!categories.includes(zakat.cat)) categories.push(zakat.cat); }
 let range = 6, tab = null, editBud = null;
 const F = { q: '', cat: '', tag: '', type: '', sort: 'date-desc' };
 
-const persist = () => { save('finance_entries', entries); save('finance_categories', categories); save('finance_budgets', budgets); save('finance_tags', tags); cloudPush(); };
+const persist = () => { save('finance_entries', entries); save('finance_categories', categories); save('finance_budgets', budgets); save('finance_tags', tags); save('finance_zakat', zakat); save('finance_people', people); save('finance_loans', loans); cloudPush(); };
 const catColor = c => PAL[Math.max(0, categories.indexOf(c)) % PAL.length];
 
 /* ========= theme ========= */
@@ -837,6 +870,7 @@ async function renameCat(old) {
   categories = [...new Set(categories.map(c => c === old ? t : c))];
   entries.forEach(e => { if (e.category === old) e.category = t; });
   if (old in budgets) { if (!(t in budgets)) budgets[t] = budgets[old]; delete budgets[old]; }
+  if (zakat.cat === old) zakat.cat = t;
   if (F.cat === old) F.cat = t; if (hid3.has(old)) { hid3.delete(old); hid3.add(t); }
   if (editBud) resetBudForm();
   persist(); renderAll(); toast('Category renamed');
@@ -959,6 +993,158 @@ function renderTagsView(v) {
   }).join('')}</div>`;
 }
 
+/* ========= Zakat + people / loans (separate from the monthly expense maths) ========= */
+const loanKinds = {
+  lent: { dir: 'receive', kind: 'entry', label: 'I lent - they owe me (to receive)' },
+  borrowed: { dir: 'pay', kind: 'entry', label: 'I borrowed - I owe them (to pay)' },
+  recvd: { dir: 'receive', kind: 'payment', label: 'They paid me back' },
+  paid: { dir: 'pay', kind: 'payment', label: 'I paid them back' }
+};
+const kindOf = l => Object.keys(loanKinds).find(k => loanKinds[k].dir === l.dir && loanKinds[k].kind === l.kind) || 'lent';
+const zakatPaid = () => zakat.entries.reduce((a, e) => a + (+e.amount || 0), 0);
+function pStats(pid) {
+  let r = 0, p = 0;
+  loans.forEach(l => { if (l.personId !== pid) return; const v = (+l.amount || 0) * (l.kind === 'payment' ? -1 : 1); if (l.dir === 'receive') r += v; else p += v; });
+  return { r, p };
+}
+const loanTotals = () => people.reduce((t, x) => { const s = pStats(x.id); t.recv += Math.max(0, s.r); t.pay += Math.max(0, s.p); return t; }, { recv: 0, pay: 0 });
+// copy each new expense of the Zakat category into the Zakat card ONCE; after that the two are independent
+function zakatSync() {
+  if (cloud.on && !cloud.mReady) return;          // wait for cloud data first so deleted copies are not resurrected
+  const cp = new Set(zakat.copied), have = new Set(zakat.entries.map(e => e.id)); let ch = false;
+  entries.forEach(e => {
+    if (e.type !== 'expense' || e.category !== zakat.cat || cp.has(e.id)) return;
+    if (!have.has('z_' + e.id)) zakat.entries.push({ id: 'z_' + e.id, title: e.title, amount: e.amount, date: e.date, note: e.note || '', src: e.id });
+    zakat.copied.push(e.id); cp.add(e.id); ch = true;
+  });
+  if (ch) { save('finance_zakat', zakat); cloudPush(); }
+}
+function renderKpis2() {
+  const t = loanTotals(), paid = zakatPaid(), tg = zakat.target, net = t.recv - t.pay;
+  const k = [
+    ['Zakat left to pay', tg > 0 ? Math.max(0, tg - paid) : null, tg > 0 && paid >= tg ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400', '🕌', 'zakatSec', tg > 0 ? (paid >= tg ? 'Target met' : fmt(paid) + ' paid of ' + fmt(tg)) : 'Tap to set a target'],
+    ['To receive', t.recv, 'text-emerald-600 dark:text-emerald-400', '📥', 'loanSec', 'from people'],
+    ['To pay', t.pay, 'text-rose-600 dark:text-rose-400', '📤', 'loanSec', 'to people'],
+    ['Net (receive − pay)', net, net >= 0 ? 'text-sky-600 dark:text-sky-400' : 'text-rose-600 dark:text-rose-400', '⚖️', 'loanSec', 'loans & receivables']
+  ];
+  $('#kpis2').innerHTML = k.map(x => `<button type="button" data-go="${x[4]}" class="card !p-4 text-left" style="cursor:pointer"><div class="flex justify-between text-xs text-slate-500"><span>${x[0]}</span><span>${x[3]}</span></div><div class="mt-2 text-lg sm:text-xl font-bold ${x[2]} break-words">${x[1] == null ? '—' : fmt(x[1])}</div><div class="text-xs text-slate-400 mt-1">${esc(x[5])}</div></button>`).join('');
+}
+$('#kpis2').onclick = e => { const b = e.target.closest('[data-go]'); if (b) $('#' + b.dataset.go).scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+
+function renderZakat() {
+  const paid = zakatPaid(), t = zakat.target, left = t - paid, pct = t > 0 ? Math.min(100, paid / t * 100) : 0;
+  const list = zakat.entries.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  const col = pct >= 100 ? 'bg-emerald-500' : pct >= 70 ? 'bg-amber-500' : 'bg-sky-500';
+  $('#zakatBox').innerHTML = `
+    <div class="grid grid-cols-3 gap-3 mb-3 text-center">
+      <div><div class="text-xs text-slate-500">Target</div><div class="font-bold break-words">${t > 0 ? fmt(t) : '—'}</div></div>
+      <div><div class="text-xs text-slate-500">Paid</div><div class="font-bold text-emerald-600 break-words">${fmt(paid)}</div></div>
+      <div><div class="text-xs text-slate-500">Left</div><div class="font-bold ${left > 0 ? 'text-amber-600' : 'text-emerald-600'} break-words">${t > 0 ? fmt(Math.max(0, left)) : '—'}</div></div>
+    </div>
+    ${t > 0 ? `<div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"><div class="h-full ${col} transition-all" style="width:${pct}%"></div></div>
+    <div class="text-xs text-slate-500 mt-1.5 mb-3">${left > 0 ? fmt(left) + ' left to pay · ' + pct.toFixed(0) + '% done' : 'Target met' + (left < 0 ? ' · ' + fmt(-left) + ' extra' : '')}</div>` : '<div class="text-xs text-slate-400 mb-3">Set a target to track how much Zakat is left to pay.</div>'}
+    <div class="text-xs text-slate-400 mb-3">Expenses in the “${esc(zakat.cat)}” category are copied here automatically. Edits and deletes here never change your monthly expenses.</div>
+    ${list.length ? `<ul class="divide-y divide-slate-100 dark:divide-slate-800 text-sm rounded-xl border border-slate-200 dark:border-slate-800 px-3">${list.map(e => `<li style="padding:.6rem 0"><div class="flex justify-between gap-2"><span style="min-width:0"><span class="block font-medium">${esc(e.title || 'Zakat payment')}</span><span class="text-xs text-slate-400">${fdate(e.date)}${e.note ? ' · ' + esc(e.note) : ''}</span></span><span class="shrink-0 font-semibold text-emerald-600">${fmt(e.amount)}</span></div><div class="mt-1.5"><button class="mini" data-zed="${esc(e.id)}">Edit</button> <button class="mini danger" data-zdl="${esc(e.id)}">Delete</button></div></li>`).join('')}</ul>` : '<div class="text-center py-6 text-slate-400"><div class="text-3xl mb-1">🕌</div>No Zakat payments yet</div>'}`;
+  $('#zkTarget').value = t > 0 ? t : '';
+}
+$('#zkForm').onsubmit = e => {
+  e.preventDefault(); const v = parseFloat($('#zkTarget').value);
+  if (!(v >= 0) || !isFinite(v)) return toast('Enter a valid target', 'err');
+  zakat.target = v; persist(); renderAll(); toast(v ? 'Zakat target saved' : 'Zakat target cleared');
+};
+$('#zkAdd').onclick = () => openRec('zakat');
+$('#zakatBox').onclick = e => {
+  const ed = e.target.closest('[data-zed]'), dl = e.target.closest('[data-zdl]');
+  if (ed) openRec('zakat', zakat.entries.find(x => x.id === ed.dataset.zed));
+  if (dl) delRec('zakat', dl.dataset.zdl);
+};
+
+function renderLoans() {
+  const t = loanTotals();
+  $('#loanSummary').innerHTML = `<span class="pill bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300">To receive ${fmt(t.recv)}</span> <span class="pill bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300">To pay ${fmt(t.pay)}</span>`;
+  if (!people.length) { $('#loanList').innerHTML = '<div class="text-center py-6 text-slate-400"><div class="text-3xl mb-1">🤝</div>Add a person to start tracking loans and receivables.</div>'; return; }
+  $('#loanList').innerHTML = people.map(p => {
+    const s = pStats(p.id), recs = loans.filter(l => l.personId === p.id).sort((a, b) => new Date(b.date) - new Date(a.date));
+    const r = Math.max(0, s.r), pay = Math.max(0, s.p);
+    const net = r - pay, badge = net > 0 ? `<span class="pill bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300">Owes you ${fmt(net)}</span>` : net < 0 ? `<span class="pill bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300">You owe ${fmt(-net)}</span>` : `<span class="pill bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">Settled</span>`;
+    return `<div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3" style="min-width:0"><div class="flex flex-wrap items-center justify-between gap-2 mb-2"><div class="font-semibold truncate" style="min-width:0">👤 ${esc(p.name)}</div>${badge}</div>
+      <div class="text-xs text-slate-500 mb-2">To receive <b class="text-emerald-600">${fmt(r)}</b> · To pay <b class="text-rose-600">${fmt(pay)}</b>${s.r < 0 ? ' · overpaid by ' + fmt(-s.r) : ''}${s.p < 0 ? ' · overpaid by ' + fmt(-s.p) : ''}</div>
+      <div class="flex flex-wrap gap-1 mb-2"><button class="mini" data-radd="${esc(p.id)}">+ Record</button><button class="mini" data-prn="${esc(p.id)}">Rename</button><button class="mini danger" data-pdl="${esc(p.id)}">Delete</button></div>
+      <details ${recs.length && recs.length <= 3 ? 'open' : ''}><summary class="text-xs font-medium text-emerald-600 cursor-pointer">${recs.length} record${recs.length === 1 ? '' : 's'}</summary>
+      <ul class="mt-2 divide-y divide-slate-100 dark:divide-slate-800 text-sm">${recs.map(l => { const k = loanKinds[kindOf(l)], good = l.dir === 'receive'; return `<li class="py-2"><div class="flex justify-between gap-2"><span class="min-w-0"><span class="block">${esc(k.label)}</span><span class="text-xs text-slate-400">${fdate(l.date)}${l.note ? ' · ' + esc(l.note) : ''}</span></span><span class="shrink-0 font-semibold ${good ? 'text-emerald-600' : 'text-rose-600'}">${l.kind === 'payment' ? '−' : '+'}${fmt(l.amount)}</span></div><div class="mt-1"><button class="mini" data-led="${esc(l.id)}">Edit</button> <button class="mini danger" data-ldl="${esc(l.id)}">Delete</button></div></li>`; }).join('')}</ul></details></div>`;
+  }).join('');
+}
+$('#peopleForm').onsubmit = e => {
+  e.preventDefault(); const n = $('#personNew').value.trim(); if (!n) return;
+  if (people.some(p => same(p.name, n))) return toast('That person already exists', 'err');
+  people.push({ id: uid(), name: n }); $('#personNew').value = ''; persist(); renderAll(); toast('Person added');
+};
+$('#loanAdd').onclick = () => { if (!people.length) return toast('Add a person first', 'err'); openRec('loan'); };
+$('#loanList').onclick = async e => {
+  const g = s => e.target.closest(s);
+  if (g('[data-radd]')) return openRec('loan', null, g('[data-radd]').dataset.radd);
+  if (g('[data-led]')) return openRec('loan', loans.find(x => x.id === g('[data-led]').dataset.led));
+  if (g('[data-ldl]')) return delRec('loan', g('[data-ldl]').dataset.ldl);
+  if (g('[data-prn]')) {
+    const p = people.find(x => x.id === g('[data-prn]').dataset.prn), n = await askText('Rename person', '', p.name, 'Save');
+    if (n == null || n === p.name) return; if (!n) return toast('Name is required', 'err');
+    if (people.some(x => x.id !== p.id && same(x.name, n))) return toast('That person already exists', 'err');
+    p.name = n; persist(); renderAll(); toast('Person renamed');
+  }
+  if (g('[data-pdl]')) {
+    const p = people.find(x => x.id === g('[data-pdl]').dataset.pdl), n = loans.filter(l => l.personId === p.id).length;
+    if (!(await confirmYes('Delete person?', `"${p.name}"${n ? ` and their ${n} record${n === 1 ? '' : 's'}` : ''} will be removed.`))) return;
+    const keep = loans.filter(l => l.personId === p.id), idx = people.indexOf(p);
+    people = people.filter(x => x.id !== p.id); loans = loans.filter(l => l.personId !== p.id); persist(); renderAll();
+    toast('Person deleted', null, { label: 'Undo', fn: () => { people.splice(Math.min(idx, people.length), 0, p); loans = loans.concat(keep); persist(); renderAll(); toast('Restored'); } });
+  }
+};
+function delRec(kind, id) {
+  const arr = kind === 'zakat' ? zakat.entries : loans, i = arr.findIndex(x => x.id === id); if (i < 0) return;
+  const r = arr[i];
+  confirmYes('Delete this record?', `${fmt(r.amount)}${r.title ? ' - ' + r.title : ''}. Your monthly expenses are not affected.`).then(ok => {
+    if (!ok) return;
+    const a = kind === 'zakat' ? zakat.entries : loans, j = a.findIndex(x => x.id === id); if (j < 0) return;
+    const [rm] = a.splice(j, 1); if (kind === 'loan') loans = a; persist(); renderAll();
+    toast('Deleted', null, { label: 'Undo', fn: () => { (kind === 'zakat' ? zakat.entries : loans).splice(j, 0, rm); persist(); renderAll(); toast('Restored'); } });
+  });
+}
+/* shared record modal */
+let recMode = null, recEdit = null;
+function openRec(mode, rec, personId) {
+  recMode = mode; recEdit = rec || null; const L = mode === 'loan';
+  $('#recTitle').textContent = (rec ? 'Edit ' : 'New ') + (L ? 'loan record' : 'Zakat payment');
+  $('#recBody').innerHTML = (L ? `<div><label class="lbl" for="rPerson">Person</label><select id="rPerson" class="inp">${people.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></div>
+    <div><label class="lbl" for="rKind">Type</label><select id="rKind" class="inp">${Object.keys(loanKinds).map(k => `<option value="${k}">${esc(loanKinds[k].label)}</option>`).join('')}</select></div>`
+    : `<div><label class="lbl" for="rTitle">Title</label><input id="rTitle" class="inp" maxlength="120" placeholder="Zakat payment"></div>`) + `
+    <div><label class="lbl" for="rAmt">Amount (PKR) *</label><input id="rAmt" type="number" step="any" min="0" inputmode="decimal" class="inp" placeholder="0"></div>
+    <div><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="rManual" class="w-4 h-4 accent-emerald-500"> Set Date Manually</label><input id="rDate" type="datetime-local" class="inp mt-2 hidden"></div>
+    <div><label class="lbl" for="rNote">Note</label><textarea id="rNote" rows="2" class="inp" placeholder="Optional"></textarea></div><p id="rErr" class="text-xs text-rose-500"></p>`;
+  if (L) { $('#rPerson').value = rec ? rec.personId : (personId || people[0].id); $('#rKind').value = rec ? kindOf(rec) : 'lent'; } else $('#rTitle').value = rec ? rec.title : '';
+  $('#rAmt').value = rec ? rec.amount : ''; $('#rNote').value = rec ? rec.note || '' : '';
+  $('#rManual').checked = !!rec; $('#rDate').classList.toggle('hidden', !rec); $('#rDate').value = rec ? toLocalInput(rec.date) : '';
+  $('#rManual').onchange = ev => { $('#rDate').classList.toggle('hidden', !ev.target.checked); if (ev.target.checked && !$('#rDate').value) $('#rDate').value = toLocalInput(new Date()); };
+  const o = $('#recOvl'); o.classList.remove('hidden'); requestAnimationFrame(() => { o.classList.remove('closed'); $('#recForm').classList.remove('closed'); }); setTimeout(() => ($('#rTitle') || $('#rAmt')).focus(), 280);
+}
+function closeRec() { const o = $('#recOvl'); o.classList.add('closed'); $('#recForm').classList.add('closed'); setTimeout(() => o.classList.add('hidden'), 250); }
+$('#recClose').onclick = $('#recCancel').onclick = closeRec;
+$('#recOvl').addEventListener('mousedown', e => { if (e.target.id === 'recOvl') closeRec(); });
+$('#recForm').addEventListener('submit', ev => {
+  ev.preventDefault(); const amount = parseFloat($('#rAmt').value);
+  if (!(amount > 0) || !isFinite(amount)) return $('#rErr').textContent = 'Enter an amount above 0';
+  let date = recEdit ? new Date(recEdit.date) : new Date();
+  if ($('#rManual').checked && $('#rDate').value) { const d = new Date($('#rDate').value); if (!isNaN(d)) date = d; }
+  const note = $('#rNote').value.trim();
+  if (recMode === 'zakat') {
+    const rec = { id: recEdit ? recEdit.id : uid(), title: $('#rTitle').value.trim() || 'Zakat payment', amount, date: date.toISOString(), note }; if (recEdit && recEdit.src) rec.src = recEdit.src;
+    const i = zakat.entries.findIndex(x => x.id === rec.id); i >= 0 ? zakat.entries[i] = rec : zakat.entries.push(rec);
+  } else {
+    const k = loanKinds[$('#rKind').value], rec = { id: recEdit ? recEdit.id : uid(), personId: $('#rPerson').value, dir: k.dir, kind: k.kind, amount, date: date.toISOString(), note };
+    const i = loans.findIndex(x => x.id === rec.id); i >= 0 ? loans[i] = rec : loans.push(rec);
+  }
+  persist(); closeRec(); renderAll(); toast(recEdit ? 'Updated' : 'Added');
+});
+
 /* ========= backup ========= */
 function autoBackup() {
   const ts = +load('finance_last_backup_ts', 0), now = Date.now();
@@ -976,7 +1162,7 @@ function renderBackupInfo() {
 /* ========= data manager ========= */
 function download(name, text, mime) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: mime })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
 const stamp = () => new Date().toISOString().slice(0, 10);
-$('#expJson').onclick = () => { download(`budget-os-${stamp()}.json`, JSON.stringify({ app: 'budget-os', version: 1, exportedAt: new Date().toISOString(), entries, categories, budgets, tags }, null, 2), 'application/json'); toast('JSON exported'); };
+$('#expJson').onclick = () => { download(`budget-os-${stamp()}.json`, JSON.stringify({ app: 'budget-os', version: 2, exportedAt: new Date().toISOString(), entries, categories, budgets, tags, zakat, people, loans }, null, 2), 'application/json'); toast('JSON exported'); };
 $('#expCsv').onclick = () => {
   const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
   const rows = [['id', 'date', 'title', 'type', 'amount', 'category', 'tags', 'note']].concat(entries.map(e => [e.id, e.date, e.title, e.type, e.amount, e.category, (e.tags || []).join('; '), e.note || '']));
@@ -993,13 +1179,14 @@ $('#impFile').onchange = async e => {
   if (!mode) return;
   if (mode === 'replace') { entries = clean; categories = Array.isArray(d.categories) && d.categories.length ? d.categories.slice() : categories; budgets = d.budgets && typeof d.budgets === 'object' && !Array.isArray(d.budgets) ? d.budgets : {}; tags = Array.isArray(d.tags) ? d.tags.slice() : []; }
   else { const ids = new Set(entries.map(x => x.id)); clean.forEach(x => { if (!ids.has(x.id)) { entries.push(x); ids.add(x.id); } }); if (Array.isArray(d.categories)) categories = [...new Set([...categories, ...d.categories])]; if (d.budgets && typeof d.budgets === 'object') budgets = { ...d.budgets, ...budgets }; if (Array.isArray(d.tags)) tags = [...new Set([...tags, ...d.tags])]; }
+  if (d && !Array.isArray(d)) { const r = metaDefaults(d); if (mode === 'replace') { zakat = r.zakat; people = r.people; loans = r.loans; } else { zakat = { target: zakat.target || r.zakat.target, cat: zakat.cat, entries: byId(zakat.entries, r.zakat.entries), copied: [...new Set([...zakat.copied, ...r.zakat.copied])] }; people = byId(people, r.people); loans = byId(loans, r.loans); } }
   categories = [...new Set([...categories, ...entries.map(x => x.category).filter(Boolean)])]; tags = [...new Set([...tags, ...entries.flatMap(x => x.tags)])];
   persist(); renderAll(); toast('Import complete (' + mode + ')');
 };
 $('#clear').onclick = async () => {
   if (!(await confirmYes('Clear all data?', 'This deletes every entry, budget and tag.', 'Continue'))) return;
   if (!(await confirmYes('Are you absolutely sure?', 'This cannot be undone. Export a backup first if unsure.', 'Yes, erase everything'))) return;
-  entries = []; budgets = {}; tags = []; categories = DEF_CATS.slice(); persist(); save('finance_backups', []); renderAll(); toast('All data cleared');
+  entries = []; budgets = {}; tags = []; categories = DEF_CATS.slice(); zakat = normZ(null); people = []; loans = []; persist(); save('finance_backups', []); renderAll(); toast('All data cleared');
 };
 $('#sample').onclick = async () => {
   if (entries.length && !(await confirmBox('Load sample data?', 'Adds 50 sample entries to your existing data.', [{ label: 'Cancel', value: false }, { label: 'Add samples', value: true, cls: 'btn-p' }]))) return;
@@ -1013,12 +1200,17 @@ $('#sample').onclick = async () => {
     let tg = []; if (off === 2 && ['Fuel', 'Dining Out', 'Shopping', 'Car Maintenance'].includes(t[1]) && r() < .6) tg = [eid]; else if (t[1] === 'Utilities' && r() < .3) tg = [ren]; else if (t[1] === 'Car Maintenance' && r() < .4) tg = ['Car Service'];
     out.push(mk2(off, ri(1, Math.max(1, maxD)), ri(8, 22), t[0], Math.round(ri(t[2], t[3]) / 50) * 50, 'expense', t[1], tg)); n++;
   }
+  out.push(mk2(2, 12, 10, 'Zakat - masjid fund', 15000, 'expense', 'Zakat', []), mk2(1, 9, 15, 'Zakat - relatives', 20000, 'expense', 'Zakat', []));
+  if (!zakat.target) zakat.target = 100000;
+  if (!people.length) { const a = { id: uid(), name: 'Ali' }, b = { id: uid(), name: 'Sara' }, c = { id: uid(), name: 'Uncle Tariq' }; people = [a, b, c];
+    const L = (pp, kind, amount, off, day, note) => { const k = loanKinds[kind], d = new Date(now.getFullYear(), now.getMonth() - off, day, 12, 0); loans.push({ id: uid(), personId: pp.id, dir: k.dir, kind: k.kind, amount, date: (d > now ? now : d).toISOString(), note }); };
+    L(a, 'lent', 50000, 2, 5, 'Business help'); L(a, 'recvd', 20000, 1, 20, 'First instalment'); L(b, 'lent', 12000, 1, 3, 'Wedding shopping'); L(c, 'borrowed', 80000, 3, 10, 'Car repair loan'); L(c, 'paid', 30000, 1, 15, 'Part repayment'); }
   entries = entries.concat(out); categories = [...new Set([...categories, ...out.map(x => x.category)])]; tags = [...new Set([...tags, eid, ren, 'Car Service'])];
   persist(); renderAll(); toast(out.length + ' sample entries loaded');
 };
 
 /* ========= master render ========= */
-function renderAll() { renderTop(); renderCharts(); renderBudgetUI(); renderTagList(); renderTabs(); renderView(); renderBackupInfo(); }
+function renderAll() { zakatSync(); renderTop(); renderKpis2(); renderZakat(); renderLoans(); renderCharts(); renderBudgetUI(); renderTagList(); renderTabs(); renderView(); renderBackupInfo(); }
 
 /* ========= init ========= */
 /* ========= Firebase cloud sync (optional; app is fully local without it) ========= */
@@ -1043,7 +1235,7 @@ function cloudPush() {
       for (const id of [...cloud.eMap.keys()]) if (!cur.has(id)) { cloud.eMap.delete(id); cloud.pending = true; cloud.api.delEntry(id).catch(cloudErr); }
     }
     if (cloud.mReady) {
-      const m = { categories, tags, budgets }, j = canon(m);
+      const m = { categories, tags, budgets, zakat, people, loans }, j = canon(m);
       if (j !== cloud.metaStr) { cloud.metaStr = j; cloud.pending = true; cloud.api.setMeta({ ...JSON.parse(JSON.stringify(m)), lastBackup: +load('finance_last_backup_ts', 0), updatedAt: Date.now() }).catch(cloudErr); }
     }
   } catch (e) { cloudErr(e); }
@@ -1067,21 +1259,25 @@ function cloudOnEntries(list, fromCache, pending) {
   }
   touch(fromCache, pending);
 }
+function metaDefaults(d) { return { categories: Array.isArray(d.categories) ? d.categories : [], tags: Array.isArray(d.tags) ? d.tags : [], budgets: d.budgets && typeof d.budgets === 'object' && !Array.isArray(d.budgets) ? d.budgets : {}, zakat: normZ(d.zakat), people: Array.isArray(d.people) ? d.people : [], loans: Array.isArray(d.loans) ? d.loans : [] }; }
+function saveMetaLocal() { save('finance_categories', categories); save('finance_tags', tags); save('finance_budgets', budgets); save('finance_zakat', zakat); save('finance_people', people); save('finance_loans', loans); }
 function cloudOnMeta(d, fromCache, pending) {
   if (!cloud.mReady) {
     if (!d && fromCache) return setStatus();
     const first = localStorage.getItem('finance_cloud_seeded_m') !== seedKey();
     if (d) {
-      const rc = Array.isArray(d.categories) ? d.categories : [], rt = Array.isArray(d.tags) ? d.tags : [], rb = d.budgets && typeof d.budgets === 'object' ? d.budgets : {};
-      cloud.metaStr = canon({ categories: rc, tags: rt, budgets: rb });
-      if (first) { categories = [...new Set([...rc, ...categories])]; tags = [...new Set([...rt, ...tags])]; budgets = { ...budgets, ...rb }; }
-      else { categories = rc.length ? rc : categories; tags = rt; budgets = rb; }
+      const r = metaDefaults(d); cloud.metaStr = canon(r);
+      if (first) {   // first connect: merge this device's data into the cloud's
+        categories = [...new Set([...r.categories, ...categories])]; tags = [...new Set([...r.tags, ...tags])]; budgets = { ...budgets, ...r.budgets };
+        zakat = { target: r.zakat.target || zakat.target, cat: r.zakat.entries.length || r.zakat.target ? r.zakat.cat : zakat.cat, entries: byId(r.zakat.entries, zakat.entries), copied: [...new Set([...r.zakat.copied, ...zakat.copied])] };
+        people = byId(r.people, people); loans = byId(r.loans, loans);
+      } else { categories = r.categories.length ? r.categories : categories; tags = r.tags; budgets = r.budgets; zakat = r.zakat; people = r.people; loans = r.loans; }
     } else cloud.metaStr = '';
     cloud.mReady = true; try { localStorage.setItem('finance_cloud_seeded_m', seedKey()); } catch (e) {}
-    save('finance_categories', categories); save('finance_tags', tags); save('finance_budgets', budgets); renderAll(); cloudPush();
+    saveMetaLocal(); renderAll(); cloudPush();
   } else if (d) {
-    const rc = Array.isArray(d.categories) ? d.categories : [], rt = Array.isArray(d.tags) ? d.tags : [], rb = d.budgets && typeof d.budgets === 'object' ? d.budgets : {}, j = canon({ categories: rc, tags: rt, budgets: rb });
-    if (j !== cloud.metaStr) { cloud.metaStr = j; if (rc.length) categories = rc; tags = rt; budgets = rb; save('finance_categories', categories); save('finance_tags', tags); save('finance_budgets', budgets); renderAll(); }
+    const r = metaDefaults(d), j = canon(r);
+    if (j !== cloud.metaStr) { cloud.metaStr = j; if (r.categories.length) categories = r.categories; tags = r.tags; budgets = r.budgets; zakat = r.zakat; people = r.people; loans = r.loans; saveMetaLocal(); renderAll(); }
   }
   touch(fromCache, pending);
 }
