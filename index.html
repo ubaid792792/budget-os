@@ -296,6 +296,14 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
   <section id="kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></section>
   <section id="kpis2" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></section>
 
+  <!-- Monthly transactions history -->
+  <section class="card !p-0 overflow-hidden" id="histSec">
+    <div style="padding:1rem 1.25rem .25rem"><h2 class="font-semibold">Monthly Transactions History</h2><p class="text-xs text-slate-400">Browse by month, or use the Statement tab to query and export any date range.</p></div>
+    <div id="tabs" class="flex gap-1 overflow-x-auto noscroll px-3 pt-3 border-b border-slate-200 dark:border-slate-800"></div>
+    <div id="view" class="p-4 sm:p-5"></div>
+  </section>
+
+
   <!-- Charts row 1 -->
   <section class="grid lg:grid-cols-2 gap-4">
     <div class="card">
@@ -326,20 +334,6 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
     </div>
   </section>
 
-  <!-- Budgets -->
-  <section class="card">
-    <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
-      <div><h2 class="font-semibold">Budget Limits</h2><p class="text-xs text-slate-400">Optional. No limit set = unlimited. Drag ⠿ or use ▲▼ to put categories in your own order.</p></div>
-      <form id="budForm" class="flex flex-wrap gap-2 w-full sm:w-auto">
-        <select id="budCat" class="inp sm:!w-44 flex-1 min-w-[8rem]"></select>
-        <input id="budAmt" type="number" min="1" step="any" inputmode="decimal" placeholder="Limit (PKR)" class="inp sm:!w-36 flex-1 min-w-[8rem]">
-        <button class="btn-p" id="budBtn">Set</button>
-        <button type="button" id="budCancel" class="btn-s hidden">Cancel</button>
-      </form>
-    </div>
-    <form id="catForm" class="flex gap-2 mb-4"><input id="catNew" class="inp" placeholder="New category name" maxlength="40"><button class="btn-s" style="white-space:nowrap">+ Add category</button></form>
-    <div id="budList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-  </section>
 
   <!-- Zakat -->
   <section class="card" id="zakatSec">
@@ -351,29 +345,47 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
   </section>
 
   <!-- Loans -->
-  <section class="card" id="loanSec">
+  <details class="card" id="loanSec">
+    <summary class="collsum"><span><h2 class="font-semibold">🤝 Loans &amp; Receivables</h2><p class="text-xs text-slate-400">Money you will receive from, or must pay to, people.</p></span><span style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:flex-end"><span id="loanSummary"></span><span class="chev">▾</span></span></summary>
+    <div class="collbody">
     <div class="flex flex-wrap items-end justify-between gap-3 mb-3">
-      <div><h2 class="font-semibold">🤝 Loans &amp; Receivables</h2><p class="text-xs text-slate-400">Money you will receive from, or must pay to, people.</p></div>
+      <div></div>
       <form id="peopleForm" class="flex flex-wrap gap-2 w-full sm:w-auto"><input id="personNew" class="inp sm:!w-44 flex-1 min-w-[8rem]" placeholder="Add person" maxlength="40"><button class="btn-s" style="white-space:nowrap">+ Person</button><button type="button" id="loanAdd" class="btn-p" style="white-space:nowrap">+ Record</button></form>
     </div>
-    <div id="loanSummary" class="mb-3"></div>
     <div id="loanList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-  </section>
+  </div></details>
+
 
   <!-- Tags -->
-  <section class="card">
+  <details class="card" id="tagSec">
+    <summary class="collsum"><span><h2 class="font-semibold">Tags / Events</h2><p class="text-xs text-slate-400">Add, rename or delete tags. Renames and deletes apply to all entries.</p></span><span class="chev">▾</span></summary>
+    <div class="collbody">
     <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
-      <div><h2 class="font-semibold">Tags / Events</h2><p class="text-xs text-slate-400">Add, rename or delete tags. Renames and deletes apply to all entries.</p></div>
+      <div></div>
       <form id="tagForm" class="flex gap-2 w-full sm:w-auto"><input id="tagNew" class="inp" placeholder="New tag / event" maxlength="40"><button class="btn-s" style="white-space:nowrap">+ Add tag</button></form>
     </div>
     <div id="tagList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-  </section>
+  </div></details>
 
-  <!-- Data views -->
-  <section class="card !p-0 overflow-hidden">
-    <div id="tabs" class="flex gap-1 overflow-x-auto noscroll px-3 pt-3 border-b border-slate-200 dark:border-slate-800"></div>
-    <div id="view" class="p-4 sm:p-5"></div>
-  </section>
+
+  <!-- Budgets -->
+  <details class="card" id="budSec">
+    <summary class="collsum"><span><h2 class="font-semibold">Budget Categories</h2><p class="text-xs text-slate-400">Add, rename, delete and reorder categories; optional limits (none = unlimited). Drag ⠿ or use ▲▼.</p></span><span class="chev">▾</span></summary>
+    <div class="collbody">
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+      <div></div>
+      <form id="budForm" class="flex flex-wrap gap-2 w-full sm:w-auto">
+        <select id="budCat" class="inp sm:!w-44 flex-1 min-w-[8rem]"></select>
+        <input id="budAmt" type="number" min="1" step="any" inputmode="decimal" placeholder="Limit (PKR)" class="inp sm:!w-36 flex-1 min-w-[8rem]">
+        <button class="btn-p" id="budBtn">Set</button>
+        <button type="button" id="budCancel" class="btn-s hidden">Cancel</button>
+      </form>
+    </div>
+    <form id="catForm" class="flex gap-2 mb-4"><input id="catNew" class="inp" placeholder="New category name" maxlength="40"><button class="btn-s" style="white-space:nowrap">+ Add category</button></form>
+    <div id="budList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+  </div></details>
+
+
 </main>
 
 <footer class="max-w-6xl mx-auto px-4 pb-28 sm:pb-10">
@@ -466,7 +478,9 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 
 <div id="toasts" class="fixed z-[60] left-1/2 -translate-x-1/2 bottom-24 sm:bottom-6 flex flex-col gap-2 items-center w-[92vw] max-w-sm pointer-events-none"></div>
 
-<style>.syncbar{display:flex;align-items:center;gap:.5rem;width:100%;max-width:72rem;margin:0 auto;padding:0 1rem .4rem;font-size:.7rem;color:#64748b;text-align:left}.syncbar i{width:.5rem;height:.5rem;border-radius:50%;background:#94a3b8;flex:none}.syncbar[data-st=ok] i{background:#10b981}.syncbar[data-st=busy] i{background:#f59e0b}.syncbar[data-st=off] i{background:#f43f5e}.fbovl{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;background:#f8fafc;overflow-y:auto;padding:1.25rem 1rem}.dark .fbovl{background:#020617}.fbovl.hidden{display:none}.fbbox{width:100%;max-width:30rem;margin:auto}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.catcard.dragging{opacity:.4}.catcard.dragover{outline:2px dashed #10b981;outline-offset:2px}.draghandle{cursor:grab;color:#94a3b8;padding:0 .25rem;user-select:none}.mini{font-size:.75rem;padding:.25rem .55rem;border-radius:.5rem;background:#f1f5f9;color:#334155}.mini:hover{background:#e2e8f0}.dark .mini{background:#1e293b;color:#e2e8f0}.dark .mini:hover{background:#334155}.mini.danger{background:#fff1f2;color:#e11d48}.dark .mini.danger{background:rgba(244,63,94,.12);color:#fda4af}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:.85rem}.empty.hidden{display:none}.seg.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}.dark .seg.on{background:#334155}</style>
+<style>.syncbar{display:flex;align-items:center;gap:.5rem;width:100%;max-width:72rem;margin:0 auto;padding:0 1rem .4rem;font-size:.7rem;color:#64748b;text-align:left}.syncbar i{width:.5rem;height:.5rem;border-radius:50%;background:#94a3b8;flex:none}.syncbar[data-st=ok] i{background:#10b981}.syncbar[data-st=busy] i{background:#f59e0b}.syncbar[data-st=off] i{background:#f43f5e}.fbovl{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;background:#f8fafc;overflow-y:auto;padding:1.25rem 1rem}.dark .fbovl{background:#020617}.fbovl.hidden{display:none}.fbbox{width:100%;max-width:30rem;margin:auto}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.collsum{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:.75rem}.collsum::-webkit-details-marker{display:none}.collsum .chev{transition:transform .2s;color:#94a3b8;font-size:1.1rem}details[open]>.collsum .chev{transform:rotate(180deg)}.collbody{margin-top:1rem}
+@media print{body.printing{background:#fff!important;color:#000!important}body.printing header,body.printing footer,body.printing #fab,body.printing #toasts,body.printing .tip,body.printing .noprint,body.printing #tabs,body.printing main>*:not(#histSec),body.printing [data-edit],body.printing [data-del]{display:none!important}body.printing .card{border:0!important;box-shadow:none!important;background:#fff!important}body.printing *{color:#000!important}body.printing .pill{border:1px solid #999;background:none!important}}
+.catcard.dragging{opacity:.4}.catcard.dragover{outline:2px dashed #10b981;outline-offset:2px}.draghandle{cursor:grab;color:#94a3b8;padding:0 .25rem;user-select:none}.mini{font-size:.75rem;padding:.25rem .55rem;border-radius:.5rem;background:#f1f5f9;color:#334155}.mini:hover{background:#e2e8f0}.dark .mini{background:#1e293b;color:#e2e8f0}.dark .mini:hover{background:#334155}.mini.danger{background:#fff1f2;color:#e11d48}.dark .mini.danger{background:rgba(244,63,94,.12);color:#fda4af}.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#94a3b8;font-size:.85rem}.empty.hidden{display:none}.seg.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}.dark .seg.on{background:#334155}</style>
 
 <script>
 'use strict';
@@ -543,11 +557,12 @@ if (!budgets || typeof budgets !== 'object' || Array.isArray(budgets)) budgets =
 let tags = load('finance_tags', []);
 if (!Array.isArray(tags)) tags = [];
 if (!Array.isArray(entries)) entries = [];
-const normZ = z => { z = z && typeof z === 'object' ? z : {}; return { target: +z.target || 0, cat: z.cat || 'Zakat', entries: Array.isArray(z.entries) ? z.entries : [], copied: Array.isArray(z.copied) ? z.copied : [] }; };
+const ZRE = /zakat|zakah|sadq|sadaq|sadka|charity/i;
+const normZ = z => { z = z && typeof z === 'object' ? z : {}; return { target: +z.target || 0, cat: z.cat || 'Zakat', cats: Array.isArray(z.cats) ? z.cats : null, entries: Array.isArray(z.entries) ? z.entries : [], copied: Array.isArray(z.copied) ? z.copied : [] }; };
 const byId = (a, b) => { const ids = new Set(a.map(x => x.id)); return a.concat(b.filter(x => !ids.has(x.id))); };
 let zakat = normZ(load('finance_zakat', null)), people = load('finance_people', []), loans = load('finance_loans', []);
 if (!Array.isArray(people)) people = []; if (!Array.isArray(loans)) loans = [];
-{ const zc = categories.find(c => c.toLowerCase() === 'zakat'); if (zc) zakat.cat = zakat.cat === 'Zakat' ? zc : zakat.cat; else if (!categories.includes(zakat.cat)) categories.push(zakat.cat); }
+if (!categories.some(c => ZRE.test(c))) categories.push(zakat.cat);   // make sure there is a category to start from
 let range = 6, tab = null, editBud = null;
 const F = { q: '', cat: '', tag: '', type: '', sort: 'date-desc' };
 
@@ -870,7 +885,7 @@ async function renameCat(old) {
   categories = [...new Set(categories.map(c => c === old ? t : c))];
   entries.forEach(e => { if (e.category === old) e.category = t; });
   if (old in budgets) { if (!(t in budgets)) budgets[t] = budgets[old]; delete budgets[old]; }
-  if (zakat.cat === old) zakat.cat = t;
+  if (zakat.cat === old) zakat.cat = t; if (zakat.cats) zakat.cats = [...new Set(zakat.cats.map(c => c === old ? t : c))];
   if (F.cat === old) F.cat = t; if (hid3.has(old)) { hid3.delete(old); hid3.add(t); }
   if (editBud) resetBudForm();
   persist(); renderAll(); toast('Category renamed');
@@ -919,9 +934,9 @@ $('#tagForm').onsubmit = e => {
 /* ========= tabs + views ========= */
 function renderTabs() {
   const months = [...new Set(entries.map(e => mkey(e.date)))].sort().reverse();
-  const valid = [...months, 'all', 'tags'];
+  const valid = [...months, 'all', 'stmt', 'tags'];
   if (!valid.includes(tab)) tab = months[0] || 'all';
-  const items = months.map(k => [k, mlabel(k)]).concat([['all', 'All Time'], ['tags', 'Tags Analysis']]);
+  const items = months.map(k => [k, mlabel(k)]).concat([['all', 'All Time'], ['stmt', 'Statement'], ['tags', 'Tags Analysis']]);
   $('#tabs').innerHTML = items.map(([k, l]) => `<button data-tab="${k}" class="shrink-0 px-3.5 py-2 text-sm rounded-t-xl border-b-2 whitespace-nowrap ${k === tab ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}">${l}</button>`).join('');
 }
 $('#tabs').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; renderTabs(); renderView(); } };
@@ -929,6 +944,7 @@ $('#tabs').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) { t
 function renderView() {
   const v = $('#view');
   if (tab === 'tags') return renderTagsView(v);
+  if (tab === 'stmt') return renderStatement(v);
   const opt = (arr, sel, all) => `<option value="">${all}</option>` + arr.map(x => `<option ${x === sel ? 'selected' : ''}>${esc(x)}</option>`).join('');
   v.innerHTML = `<div class="grid grid-cols-2 lg:grid-cols-5 gap-2 mb-4">
     <input id="fq" class="inp col-span-2 lg:col-span-1" placeholder="🔍 Search title, category, tag" value="${esc(F.q)}">
@@ -955,8 +971,11 @@ function renderTable() {
   list.sort((a, b) => by === 'date' ? m * (new Date(a.date) - new Date(b.date)) : m * (a.amount - b.amount));
   const w = $('#tblWrap');
   if (!list.length) { w.innerHTML = `<div class="text-center py-12 text-slate-400"><div class="text-4xl mb-2">${entries.length ? '🔎' : '🧾'}</div><div>${entries.length ? 'No entries match your filters' : 'No entries yet. Add one or load sample data.'}</div></div>`; return; }
+  w.innerHTML = entriesTableHtml(list);
+}
+function entriesTableHtml(list, withSummary = true) {
   const inc = sum(list, 'income'), exp = sum(list, 'expense');
-  w.innerHTML = `<div class="text-xs text-slate-500 mb-2">${list.length} entries · Income <b class="text-emerald-600">${fmt(inc)}</b> · Expense <b class="text-rose-600">${fmt(exp)}</b></div>
+  return `${withSummary ? `<div class="text-xs text-slate-500 mb-2">${list.length} entries · Income <b class="text-emerald-600">${fmt(inc)}</b> · Expense <b class="text-rose-600">${fmt(exp)}</b></div>` : ''}
   <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800"><table class="w-full text-sm min-w-[720px]"><thead class="bg-slate-50 dark:bg-slate-800/60 text-xs uppercase text-slate-500"><tr>${['Date', 'Title', 'Category', 'Tags', 'Type', 'Amount', 'Actions'].map((h, i) => `<th class="px-3 py-2.5 ${i === 5 ? 'text-right' : 'text-left'} font-semibold">${h}</th>`).join('')}</tr></thead><tbody class="divide-y divide-slate-100 dark:divide-slate-800">
   ${list.map(e => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40"><td class="px-3 py-2.5 whitespace-nowrap text-slate-500">${fdate(e.date)}</td>
     <td class="px-3 py-2.5 font-medium">${esc(e.title)}${e.note ? `<div class="text-xs text-slate-400 font-normal">${esc(e.note)}</div>` : ''}</td>
@@ -966,6 +985,69 @@ function renderTable() {
     <td class="px-3 py-2.5 text-right font-semibold whitespace-nowrap ${e.type === 'income' ? 'text-emerald-600' : 'text-rose-600'}">${e.type === 'income' ? '+' : '-'}${fmt(e.amount)}</td>
     <td class="px-3 py-2.5 whitespace-nowrap"><button data-edit="${e.id}" class="px-2 py-1 rounded-lg text-xs bg-slate-100 dark:bg-slate-800 mr-1">Edit</button><button data-del="${e.id}" class="px-2 py-1 rounded-lg text-xs bg-rose-50 text-rose-600 dark:bg-rose-500/10">Delete</button></td></tr>`).join('')}
   </tbody></table></div>`;
+}
+
+/* ===== Statement: query + export any date range ===== */
+const ymd = d => { d = new Date(d); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const S = { from: '', to: '', q: '', cat: '', tag: '', type: '' };
+function stmtList() {
+  const f = new Date(S.from + 'T00:00:00'), t = new Date(S.to + 'T23:59:59.999'), q = S.q.trim().toLowerCase();
+  return entries.filter(e => { const d = new Date(e.date); return d >= f && d <= t; })
+    .filter(e => !q || e.title.toLowerCase().includes(q) || (e.category || '').toLowerCase().includes(q) || (e.tags || []).some(x => x.toLowerCase().includes(q)) || (e.note || '').toLowerCase().includes(q))
+    .filter(e => !S.cat || e.category === S.cat).filter(e => !S.tag || (e.tags || []).includes(S.tag)).filter(e => !S.type || e.type === S.type)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+function renderStatement(v) {
+  if (!S.from) { const d = new Date(); S.from = ymd(new Date(d.getFullYear(), d.getMonth(), 1)); S.to = ymd(d); }
+  const opt = (arr, sel, all) => `<option value="">${all}</option>` + arr.map(x => `<option ${x === sel ? 'selected' : ''}>${esc(x)}</option>`).join('');
+  v.innerHTML = `<div class="noprint">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
+      <div><label class="lbl" for="sFrom">From</label><input id="sFrom" type="date" class="inp" value="${S.from}"></div>
+      <div><label class="lbl" for="sTo">To</label><input id="sTo" type="date" class="inp" value="${S.to}"></div>
+      <div class="col-span-2" style="display:flex;flex-wrap:wrap;gap:.35rem;align-items:flex-end"><button type="button" class="mini" data-pre="month">This month</button><button type="button" class="mini" data-pre="last">Last month</button><button type="button" class="mini" data-pre="30">Last 30 days</button><button type="button" class="mini" data-pre="year">This year</button><button type="button" class="mini" data-pre="all">All time</button></div>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
+      <input id="sQ" class="inp col-span-2 lg:col-span-1" placeholder="🔍 Search" value="${esc(S.q)}">
+      <select id="sCat" class="inp">${opt(categories, S.cat, 'All categories')}</select>
+      <select id="sTag" class="inp">${opt(tags, S.tag, 'All tags')}</select>
+      <select id="sType" class="inp"><option value="">Income &amp; Expense</option><option value="expense" ${S.type === 'expense' ? 'selected' : ''}>Expense</option><option value="income" ${S.type === 'income' ? 'selected' : ''}>Income</option></select>
+    </div></div><div id="stmtOut"></div>`;
+  const go = () => renderStmtOut();
+  $('#sFrom').onchange = e => { S.from = e.target.value || S.from; go(); }; $('#sTo').onchange = e => { S.to = e.target.value || S.to; go(); };
+  $('#sQ').oninput = debounce(e => { S.q = e.target.value; go(); });
+  $('#sCat').onchange = e => { S.cat = e.target.value; go(); }; $('#sTag').onchange = e => { S.tag = e.target.value; go(); }; $('#sType').onchange = e => { S.type = e.target.value; go(); };
+  v.querySelectorAll('[data-pre]').forEach(b => b.onclick = () => {
+    const n = new Date(), k = b.dataset.pre;
+    if (k === 'month') { S.from = ymd(new Date(n.getFullYear(), n.getMonth(), 1)); S.to = ymd(n); }
+    else if (k === 'last') { S.from = ymd(new Date(n.getFullYear(), n.getMonth() - 1, 1)); S.to = ymd(new Date(n.getFullYear(), n.getMonth(), 0)); }
+    else if (k === '30') { S.from = ymd(new Date(n.getTime() - 29 * DAY)); S.to = ymd(n); }
+    else if (k === 'year') { S.from = ymd(new Date(n.getFullYear(), 0, 1)); S.to = ymd(n); }
+    else { const t = entries.map(e => +new Date(e.date)); S.from = t.length ? ymd(Math.min(...t)) : ymd(n); S.to = ymd(n); }
+    $('#sFrom').value = S.from; $('#sTo').value = S.to; go();
+  });
+  renderStmtOut();
+}
+function renderStmtOut() {
+  const out = $('#stmtOut'); if (!out) return;
+  if (S.from > S.to) { out.innerHTML = '<div class="text-center py-8 text-rose-500">“From” date is after “To” date.</div>'; return; }
+  const list = stmtList(), inc = sum(list, 'income'), exp = sum(list, 'expense'), d = x => new Date(x + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const filt = [S.cat && 'Category: ' + S.cat, S.tag && 'Tag: ' + S.tag, S.type && 'Type: ' + S.type, S.q && 'Search: ' + S.q].filter(Boolean).join(' · ');
+  out.innerHTML = `<div style="margin-bottom:.75rem"><div class="font-semibold">Transaction Statement · ${d(S.from)} → ${d(S.to)}</div>${filt ? `<div class="text-xs text-slate-500">${esc(filt)}</div>` : ''}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-2 text-sm"><div class="rounded-xl border border-slate-200 dark:border-slate-800 p-2"><div class="text-xs text-slate-500">Transactions</div><b>${list.length}</b></div><div class="rounded-xl border border-slate-200 dark:border-slate-800 p-2"><div class="text-xs text-slate-500">Income</div><b class="text-emerald-600">${fmt(inc)}</b></div><div class="rounded-xl border border-slate-200 dark:border-slate-800 p-2"><div class="text-xs text-slate-500">Expense</div><b class="text-rose-600">${fmt(exp)}</b></div><div class="rounded-xl border border-slate-200 dark:border-slate-800 p-2"><div class="text-xs text-slate-500">Net</div><b class="${inc - exp >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${fmt(inc - exp)}</b></div></div></div>
+    <div class="noprint flex flex-wrap gap-2 mb-3"><button type="button" class="btn-s" id="stmtCsv" ${list.length ? '' : 'disabled'}>⬇ Export CSV</button><button type="button" class="btn-s" id="stmtPrint" ${list.length ? '' : 'disabled'}>🖨 Print / Save PDF</button></div>
+    ${list.length ? entriesTableHtml(list, false) : '<div class="text-center py-10 text-slate-400"><div class="text-4xl mb-2">🔎</div>No transactions in this range</div>'}`;
+  const csv = $('#stmtCsv'), pr = $('#stmtPrint');
+  if (csv) csv.onclick = () => {
+    const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+    const rows = [['Date', 'Title', 'Type', 'Category', 'Tags', 'Amount', 'Note']].concat(list.map(e => [e.date.slice(0, 10) + ' ' + new Date(e.date).toTimeString().slice(0, 5), e.title, e.type, e.category, (e.tags || []).join('; '), (e.type === 'income' ? '' : '-') + e.amount, e.note || '']))
+      .concat([[], ['Income', '', '', '', '', inc], ['Expense', '', '', '', '', exp], ['Net', '', '', '', '', inc - exp]]);
+    download(`statement-${S.from}_to_${S.to}.csv`, '﻿' + rows.map(r => r.map(q).join(',')).join('\r\n'), 'text/csv;charset=utf-8'); toast('Statement exported');
+  };
+  if (pr) pr.onclick = () => {
+    const dark = isDark(); document.documentElement.classList.remove('dark'); document.body.classList.add('printing');
+    const done = () => { document.body.classList.remove('printing'); if (dark) document.documentElement.classList.add('dark'); removeEventListener('afterprint', done); };
+    addEventListener('afterprint', done); setTimeout(() => window.print(), 60);
+  };
 }
 $('#view').addEventListener('click', async e => {
   const ed = e.target.closest('[data-edit]'), dl = e.target.closest('[data-del]');
@@ -1009,11 +1091,12 @@ function pStats(pid) {
 }
 const loanTotals = () => people.reduce((t, x) => { const s = pStats(x.id); t.recv += Math.max(0, s.r); t.pay += Math.max(0, s.p); return t; }, { recv: 0, pay: 0 });
 // copy each new expense of the Zakat category into the Zakat card ONCE; after that the two are independent
+const zakatCats = () => zakat.cats || categories.filter(c => ZRE.test(c));
 function zakatSync() {
   if (cloud.on && !cloud.mReady) return;          // wait for cloud data first so deleted copies are not resurrected
-  const cp = new Set(zakat.copied), have = new Set(zakat.entries.map(e => e.id)); let ch = false;
+  const cp = new Set(zakat.copied), have = new Set(zakat.entries.map(e => e.id)), zc = new Set(zakatCats()); let ch = false;
   entries.forEach(e => {
-    if (e.type !== 'expense' || e.category !== zakat.cat || cp.has(e.id)) return;
+    if (e.type !== 'expense' || !zc.has(e.category) || cp.has(e.id)) return;
     if (!have.has('z_' + e.id)) zakat.entries.push({ id: 'z_' + e.id, title: e.title, amount: e.amount, date: e.date, note: e.note || '', src: e.id });
     zakat.copied.push(e.id); cp.add(e.id); ch = true;
   });
@@ -1029,7 +1112,7 @@ function renderKpis2() {
   ];
   $('#kpis2').innerHTML = k.map(x => `<button type="button" data-go="${x[4]}" class="card !p-4 text-left" style="cursor:pointer"><div class="flex justify-between text-xs text-slate-500"><span>${x[0]}</span><span>${x[3]}</span></div><div class="mt-2 text-lg sm:text-xl font-bold ${x[2]} break-words">${x[1] == null ? '—' : fmt(x[1])}</div><div class="text-xs text-slate-400 mt-1">${esc(x[5])}</div></button>`).join('');
 }
-$('#kpis2').onclick = e => { const b = e.target.closest('[data-go]'); if (b) $('#' + b.dataset.go).scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+$('#kpis2').onclick = e => { const b = e.target.closest('[data-go]'); if (!b) return; const t = $('#' + b.dataset.go); if (t.tagName === 'DETAILS') t.open = true; t.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 
 function renderZakat() {
   const paid = zakatPaid(), t = zakat.target, left = t - paid, pct = t > 0 ? Math.min(100, paid / t * 100) : 0;
@@ -1043,7 +1126,7 @@ function renderZakat() {
     </div>
     ${t > 0 ? `<div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"><div class="h-full ${col} transition-all" style="width:${pct}%"></div></div>
     <div class="text-xs text-slate-500 mt-1.5 mb-3">${left > 0 ? fmt(left) + ' left to pay · ' + pct.toFixed(0) + '% done' : 'Target met' + (left < 0 ? ' · ' + fmt(-left) + ' extra' : '')}</div>` : '<div class="text-xs text-slate-400 mb-3">Set a target to track how much Zakat is left to pay.</div>'}
-    <div class="text-xs text-slate-400 mb-3">Expenses in the “${esc(zakat.cat)}” category are copied here automatically. Edits and deletes here never change your monthly expenses.</div>
+    <div class="text-xs text-slate-400 mb-3">Expenses in ${zakatCats().length ? zakatCats().map(c => `<b>${esc(c)}</b>`).join(', ') : 'the chosen categories'} are copied here automatically. Edits and deletes here never change your monthly expenses. <button type="button" class="mini" id="zkCats">Choose categories</button></div>
     ${list.length ? `<ul class="divide-y divide-slate-100 dark:divide-slate-800 text-sm rounded-xl border border-slate-200 dark:border-slate-800 px-3">${list.map(e => `<li style="padding:.6rem 0"><div class="flex justify-between gap-2"><span style="min-width:0"><span class="block font-medium">${esc(e.title || 'Zakat payment')}</span><span class="text-xs text-slate-400">${fdate(e.date)}${e.note ? ' · ' + esc(e.note) : ''}</span></span><span class="shrink-0 font-semibold text-emerald-600">${fmt(e.amount)}</span></div><div class="mt-1.5"><button class="mini" data-zed="${esc(e.id)}">Edit</button> <button class="mini danger" data-zdl="${esc(e.id)}">Delete</button></div></li>`).join('')}</ul>` : '<div class="text-center py-6 text-slate-400"><div class="text-3xl mb-1">🕌</div>No Zakat payments yet</div>'}`;
   $('#zkTarget').value = t > 0 ? t : '';
 }
@@ -1053,6 +1136,7 @@ $('#zkForm').onsubmit = e => {
   zakat.target = v; persist(); renderAll(); toast(v ? 'Zakat target saved' : 'Zakat target cleared');
 };
 $('#zkAdd').onclick = () => openRec('zakat');
+$('#zakatBox').addEventListener('click', e => { if (e.target.closest('#zkCats')) openRec('zcats'); });
 $('#zakatBox').onclick = e => {
   const ed = e.target.closest('[data-zed]'), dl = e.target.closest('[data-zdl]');
   if (ed) openRec('zakat', zakat.entries.find(x => x.id === ed.dataset.zed));
@@ -1113,6 +1197,13 @@ function delRec(kind, id) {
 let recMode = null, recEdit = null;
 function openRec(mode, rec, personId) {
   recMode = mode; recEdit = rec || null; const L = mode === 'loan';
+  if (mode === 'zcats') {
+    $('#recTitle').textContent = 'Categories counted as Zakat';
+    const cs = new Set(zakatCats());
+    $('#recBody').innerHTML = `<p class="text-xs text-slate-500">Expenses in the ticked categories are copied into the Zakat card (past ones too). Untick to stop counting a category.</p><div class="space-y-2" style="max-height:45vh;overflow:auto">${categories.map(c => `<label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" class="w-4 h-4 accent-emerald-500" data-zc="${esc(c)}" ${cs.has(c) ? 'checked' : ''}> ${esc(c)}</label>`).join('')}</div><button type="button" class="mini" id="zcAuto">Reset to auto-detect (names with Zakat / Sadqa / Charity)</button><p id="rErr" class="text-xs text-rose-500"></p>`;
+    $('#zcAuto').onclick = () => { zakat.cats = null; persist(); closeRec(); renderAll(); toast('Auto-detect restored'); };
+    const o = $('#recOvl'); o.classList.remove('hidden'); requestAnimationFrame(() => { o.classList.remove('closed'); $('#recForm').classList.remove('closed'); }); return;
+  }
   $('#recTitle').textContent = (rec ? 'Edit ' : 'New ') + (L ? 'loan record' : 'Zakat payment');
   $('#recBody').innerHTML = (L ? `<div><label class="lbl" for="rPerson">Person</label><select id="rPerson" class="inp">${people.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></div>
     <div><label class="lbl" for="rKind">Type</label><select id="rKind" class="inp">${Object.keys(loanKinds).map(k => `<option value="${k}">${esc(loanKinds[k].label)}</option>`).join('')}</select></div>`
@@ -1130,7 +1221,9 @@ function closeRec() { const o = $('#recOvl'); o.classList.add('closed'); $('#rec
 $('#recClose').onclick = $('#recCancel').onclick = closeRec;
 $('#recOvl').addEventListener('mousedown', e => { if (e.target.id === 'recOvl') closeRec(); });
 $('#recForm').addEventListener('submit', ev => {
-  ev.preventDefault(); const amount = parseFloat($('#rAmt').value);
+  ev.preventDefault();
+  if (recMode === 'zcats') { zakat.cats = [...document.querySelectorAll('[data-zc]')].filter(x => x.checked).map(x => x.dataset.zc); persist(); closeRec(); renderAll(); return toast('Zakat categories saved'); }
+  const amount = parseFloat($('#rAmt').value);
   if (!(amount > 0) || !isFinite(amount)) return $('#rErr').textContent = 'Enter an amount above 0';
   let date = recEdit ? new Date(recEdit.date) : new Date();
   if ($('#rManual').checked && $('#rDate').value) { const d = new Date($('#rDate').value); if (!isNaN(d)) date = d; }
@@ -1179,7 +1272,7 @@ $('#impFile').onchange = async e => {
   if (!mode) return;
   if (mode === 'replace') { entries = clean; categories = Array.isArray(d.categories) && d.categories.length ? d.categories.slice() : categories; budgets = d.budgets && typeof d.budgets === 'object' && !Array.isArray(d.budgets) ? d.budgets : {}; tags = Array.isArray(d.tags) ? d.tags.slice() : []; }
   else { const ids = new Set(entries.map(x => x.id)); clean.forEach(x => { if (!ids.has(x.id)) { entries.push(x); ids.add(x.id); } }); if (Array.isArray(d.categories)) categories = [...new Set([...categories, ...d.categories])]; if (d.budgets && typeof d.budgets === 'object') budgets = { ...d.budgets, ...budgets }; if (Array.isArray(d.tags)) tags = [...new Set([...tags, ...d.tags])]; }
-  if (d && !Array.isArray(d)) { const r = metaDefaults(d); if (mode === 'replace') { zakat = r.zakat; people = r.people; loans = r.loans; } else { zakat = { target: zakat.target || r.zakat.target, cat: zakat.cat, entries: byId(zakat.entries, r.zakat.entries), copied: [...new Set([...zakat.copied, ...r.zakat.copied])] }; people = byId(people, r.people); loans = byId(loans, r.loans); } }
+  if (d && !Array.isArray(d)) { const r = metaDefaults(d); if (mode === 'replace') { zakat = r.zakat; people = r.people; loans = r.loans; } else { zakat = { target: zakat.target || r.zakat.target, cat: zakat.cat, cats: zakat.cats || r.zakat.cats, entries: byId(zakat.entries, r.zakat.entries), copied: [...new Set([...zakat.copied, ...r.zakat.copied])] }; people = byId(people, r.people); loans = byId(loans, r.loans); } }
   categories = [...new Set([...categories, ...entries.map(x => x.category).filter(Boolean)])]; tags = [...new Set([...tags, ...entries.flatMap(x => x.tags)])];
   persist(); renderAll(); toast('Import complete (' + mode + ')');
 };
@@ -1269,7 +1362,7 @@ function cloudOnMeta(d, fromCache, pending) {
       const r = metaDefaults(d); cloud.metaStr = canon(r);
       if (first) {   // first connect: merge this device's data into the cloud's
         categories = [...new Set([...r.categories, ...categories])]; tags = [...new Set([...r.tags, ...tags])]; budgets = { ...budgets, ...r.budgets };
-        zakat = { target: r.zakat.target || zakat.target, cat: r.zakat.entries.length || r.zakat.target ? r.zakat.cat : zakat.cat, entries: byId(r.zakat.entries, zakat.entries), copied: [...new Set([...r.zakat.copied, ...zakat.copied])] };
+        zakat = { target: r.zakat.target || zakat.target, cat: r.zakat.entries.length || r.zakat.target ? r.zakat.cat : zakat.cat, cats: r.zakat.cats || zakat.cats, entries: byId(r.zakat.entries, zakat.entries), copied: [...new Set([...r.zakat.copied, ...zakat.copied])] };
         people = byId(r.people, people); loans = byId(r.loans, loans);
       } else { categories = r.categories.length ? r.categories : categories; tags = r.tags; budgets = r.budgets; zakat = r.zakat; people = r.people; loans = r.loans; }
     } else cloud.metaStr = '';
