@@ -3064,9 +3064,9 @@ function donutWithCallouts(id, labels, vals, colors) {
     x.fillStyle = s.color;
     x.fillText(s.label, textX, p3y - 6);
 
-    // Line 2: Value and percentage in clean theme typography
+    // Line 2: Value and percentage matching stock symbol color
     x.font = "9.5px system-ui, sans-serif";
-    x.fillStyle = t.txt;
+    x.fillStyle = s.color;
     x.fillText(`${kfmt(s.val)} (${s.pct.toFixed(1)}%)`, textX, p3y + 6);
   });
 
@@ -3110,13 +3110,13 @@ function renderInvestmentCharts() {
     const stockVals = sortedStocks.map(s => divByStock[s]);
     donutWithCallouts('ci1', sortedStocks, stockVals, stockColors);
     $('#li1').innerHTML = `
-      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 pt-3.5 border-t border-slate-100 dark:border-slate-800/80">
         ${sortedStocks.map((s, i) => `
-          <div class="inline-flex items-center gap-1.5 py-0.5 text-xs">
+          <div class="inline-flex items-center gap-1.5 py-0.5 text-xs whitespace-nowrap" style="color:${stockColors[i]}">
             <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${stockColors[i]}"></span>
-            <span class="font-bold" style="color:${stockColors[i]}">${esc(s)}</span>
-            <span class="text-slate-700 dark:text-slate-200 font-semibold">${fmt(stockVals[i])}</span>
-            <span class="text-[11px] text-slate-400 dark:text-slate-500 font-normal">(${((stockVals[i] / totDivs) * 100).toFixed(1)}%)</span>
+            <span class="font-bold tracking-tight">${esc(s)}</span>
+            <span class="font-semibold">${fmt(stockVals[i])}</span>
+            <span class="text-[11px] font-normal opacity-90">(${((stockVals[i] / totDivs) * 100).toFixed(1)}%)</span>
           </div>
         `).join('')}
       </div>
