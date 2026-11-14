@@ -271,7 +271,8 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 }
 
 /* ===== Investment & Portfolio Styling ===== */
-.main-nav { display: inline-flex; align-items: center; gap: .25rem; padding: .25rem; border-radius: .75rem; background: #f1f5f9; border: 1px solid #e2e8f0; }
+header.sticky { padding-top: max(0.625rem, env(safe-area-inset-top, 0.625rem)); padding-bottom: 0.375rem; }
+.main-nav { display: inline-flex; align-items: center; gap: .25rem; padding: .25rem; border-radius: .75rem; background: #f1f5f9; border: 1px solid #e2e8f0; margin: .125rem 0; flex-shrink: 0; }
 .dark .main-nav { background: #0f172a; border-color: #1e293b; }
 .nav-btn { display: inline-flex; align-items: center; gap: .375rem; padding: .35rem .85rem; border-radius: .625rem; font-weight: 600; font-size: .8125rem; cursor: pointer; transition: all .15s ease; border: 1px solid transparent; color: #64748b; background: transparent; }
 .nav-btn:hover { color: #0f172a; }
@@ -318,7 +319,7 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen antialiased">
 
 <header class="sticky top-0 z-30 bg-white/80 dark:bg-slate-950/80 backdrop-blur border-b border-slate-200 dark:border-slate-800">
-  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
+  <div class="max-w-6xl mx-auto px-4 min-h-[3.5rem] py-1 flex items-center justify-between gap-2">
     <div class="flex items-center gap-2 min-w-0">
       <div class="w-8 h-8 rounded-xl bg-emerald-500 text-white grid place-items-center font-bold shrink-0">B</div>
       <span class="font-semibold tracking-tight truncate hidden sm:inline">Budget OS</span>
@@ -501,11 +502,11 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
           <h2 class="font-semibold text-sm">Dividends by Stock</h2>
           <span class="text-xs text-slate-400" id="ci1Subtitle">All Stocks</span>
         </div>
-        <div class="cvbox" style="height:15rem">
+        <div class="cvbox" style="height:19rem">
           <div class="cvscroll"><div class="cv"><canvas id="ci1"></canvas></div></div>
           <div id="ei1" class="empty hidden"></div>
         </div>
-        <div id="li1" class="legend max-h-24 overflow-y-auto noscroll mt-2"></div>
+        <div id="li1" class="max-h-36 overflow-y-auto mt-2.5"></div>
       </div>
 
       <!-- Capital vs Value Performance Comparison Bar Chart -->
@@ -631,7 +632,7 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
       <input id="impFile" type="file" accept="application/json,.json" class="hidden">
       <button id="sample" class="btn-s">✨ Load Sample Data</button>
       <button id="fbOpen" class="btn-s">☁ Cloud Sync</button>
-      <button id="clear" class="btn-d">🗑 Clear All Data</button>
+      <button id="clear" class="btn-s !text-rose-600 dark:!text-rose-400 !border-rose-300 dark:!border-rose-900/60 hover:!bg-rose-50 dark:hover:!bg-rose-950/30">🗑 Clear All Data</button>
     </div>
     <p class="text-[11px] text-slate-400 mt-3">All data stays in this browser (LocalStorage). Export regularly.</p>
   </div>
@@ -952,6 +953,72 @@ function confirmBox(title, msg, buttons) { // buttons: [{label, value, cls}]
 }
 const confirmYes = (t, m, label = 'Delete') => confirmBox(t, m, [{ label: 'Cancel', value: false }, { label, value: true, cls: 'btn-d' }]);
 
+function confirmTyped(title, msg, requiredWord = 'DELETE') {
+  return new Promise(res => {
+    $('#cTitle').textContent = title;
+    $('#cMsg').innerHTML = `${esc(msg)}<br><span class="block mt-2.5 font-medium text-slate-700 dark:text-slate-200">To confirm, type <span class="font-mono text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-1.5 py-0.5 rounded font-bold border border-rose-200 dark:border-rose-900/60">${requiredWord}</span> below:</span>`;
+    const inp = $('#cInp');
+    inp.value = '';
+    inp.placeholder = `Type "${requiredWord}" to confirm`;
+    inp.classList.remove('hidden');
+    
+    const box = $('#cBtns');
+    box.innerHTML = '';
+    
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'btn-s';
+    cancelBtn.type = 'button';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.onclick = () => { close(); res(false); };
+    
+    const confirmBtn = document.createElement('button');
+    confirmBtn.className = 'btn-d opacity-40 cursor-not-allowed';
+    confirmBtn.type = 'button';
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Permanently Erase';
+    
+    inp.oninput = () => {
+      const match = inp.value.trim().toUpperCase() === requiredWord.toUpperCase();
+      confirmBtn.disabled = !match;
+      confirmBtn.className = match ? 'btn-d shadow-sm' : 'btn-d opacity-40 cursor-not-allowed';
+    };
+    
+    inp.onkeydown = e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (!confirmBtn.disabled) { close(); res(true); }
+      }
+    };
+    
+    confirmBtn.onclick = () => {
+      if (inp.value.trim().toUpperCase() === requiredWord.toUpperCase()) {
+        close();
+        res(true);
+      }
+    };
+    
+    box.appendChild(cancelBtn);
+    box.appendChild(confirmBtn);
+    
+    const o = $('#cOvl');
+    o.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      o.classList.remove('closed');
+      o.firstElementChild.classList.remove('closed');
+      setTimeout(() => inp.focus(), 150);
+    });
+    
+    function close() {
+      inp.classList.add('hidden');
+      inp.oninput = null;
+      inp.onkeydown = null;
+      o.classList.add('closed');
+      o.firstElementChild.classList.add('closed');
+      setTimeout(() => o.classList.add('hidden'), 250);
+    }
+  });
+}
+
 /* ========= searchable dropdown ========= */
 function combo(root, o) {
   let open = false, adding = false, q = '';
@@ -1069,8 +1136,12 @@ const tip = document.createElement('div'); tip.className = 'tip'; document.body.
     const r = cv.getBoundingClientRect(), t = cv._hit && cv._hit(e.clientX - r.left, e.clientY - r.top);
     if (!t) { tip.style.display = 'none'; return; }
     tip.textContent = t; tip.style.display = 'block';
-    tip.style.left = Math.max(8, Math.min(innerWidth - tip.offsetWidth - 8, e.clientX + 12)) + 'px';
-    tip.style.top = (e.clientY - 40 < 8 ? e.clientY + 16 : e.clientY - 40) + 'px';
+    const isTouch = e.pointerType === 'touch';
+    const yOff = isTouch ? 75 : 40;
+    const tipW = tip.offsetWidth || 140;
+    const leftPos = isTouch ? (e.clientX - tipW / 2) : (e.clientX + 12);
+    tip.style.left = Math.max(8, Math.min(innerWidth - tipW - 8, leftPos)) + 'px';
+    tip.style.top = (e.clientY - yOff < 8 ? e.clientY + (isTouch ? 36 : 16) : e.clientY - yOff) + 'px';
   };
   cv.addEventListener('pointermove', mv); cv.addEventListener('pointerdown', mv); cv.addEventListener('pointerleave', () => tip.style.display = 'none');
   $('#e' + id.slice(1)).innerHTML = '<div style="font-size:2rem">📭</div><div>No data for this period</div>';
@@ -1631,9 +1702,20 @@ $('#impFile').onchange = async e => {
   persist(); renderAll(); toast('Import complete (' + mode + ')');
 };
 $('#clear').onclick = async () => {
-  if (!(await confirmYes('Clear all data?', 'This deletes every entry, budget and tag.', 'Continue'))) return;
-  if (!(await confirmYes('Are you absolutely sure?', 'This cannot be undone. Export a backup first if unsure.', 'Yes, erase everything'))) return;
-  entries = []; budgets = {}; tags = []; categories = DEF_CATS.slice(); zakat = normZ(null); people = []; loans = []; persist(); save('finance_backups', []); renderAll(); toast('All data cleared');
+  const isInvest = activeMainTab === 'investment';
+  const title = isInvest ? 'Clear All Data (Budget & Investments)?' : 'Clear All Data?';
+  const msg = 'This action permanently deletes all your records (budget entries, categories, tags, zakat, loans, and investment portfolios). It cannot be undone.';
+  const ok = await confirmTyped(title, msg, 'DELETE');
+  if (!ok) return;
+  entries = []; budgets = {}; tags = []; categories = DEF_CATS.slice(); zakat = normZ(null); people = []; loans = [];
+  investments = {
+    version: 1,
+    portfolios: {
+      ktrades: { id: 'ktrades', name: 'KTrades', broker: 'KASB Securities', currentWorth: 0, investments: [], dividends: [] },
+      akd: { id: 'akd', name: 'AKD', broker: 'AKD Trade', currentWorth: 0, investments: [], dividends: [] }
+    }
+  };
+  persist(); save('finance_backups', []); renderAll(); toast('All data has been cleared');
 };
 $('#sample').onclick = async () => {
   if (entries.length && !(await confirmBox('Load sample data?', 'Adds 50 sample entries to your existing data.', [{ label: 'Cancel', value: false }, { label: 'Add samples', value: true, cls: 'btn-p' }]))) return;
@@ -2579,8 +2661,12 @@ function getTickerColor(sym) {
     const r = cv.getBoundingClientRect(), t = cv._hit && cv._hit(e.clientX - r.left, e.clientY - r.top);
     if (!t) { tip.style.display = 'none'; return; }
     tip.textContent = t; tip.style.display = 'block';
-    tip.style.left = Math.max(8, Math.min(innerWidth - tip.offsetWidth - 8, e.clientX + 12)) + 'px';
-    tip.style.top = (e.clientY - 40 < 8 ? e.clientY + 16 : e.clientY - 40) + 'px';
+    const isTouch = e.pointerType === 'touch';
+    const yOff = isTouch ? 75 : 40;
+    const tipW = tip.offsetWidth || 140;
+    const leftPos = isTouch ? (e.clientX - tipW / 2) : (e.clientX + 12);
+    tip.style.left = Math.max(8, Math.min(innerWidth - tipW - 8, leftPos)) + 'px';
+    tip.style.top = (e.clientY - yOff < 8 ? e.clientY + (isTouch ? 36 : 16) : e.clientY - yOff) + 'px';
   };
   cv.addEventListener('pointermove', mv);
   cv.addEventListener('pointerdown', mv);
@@ -2703,7 +2789,7 @@ function renderInvestments() {
   
   const eqValEl = $('#equityValLabel');
   eqValEl.textContent = fmt(m.currentWorth);
-  eqValEl.className = 'font-semibold ' + (m.capitalGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400');
+  eqValEl.className = 'font-semibold text-slate-800 dark:text-slate-100';
 
   // Header balance if on investment tab
   if (activeMainTab === 'investment') {
@@ -2714,8 +2800,39 @@ function renderInvestments() {
 
   // 1. KPI Cards
   const capSign = m.capitalGain >= 0 ? '+' : '';
-  const capColor = m.capitalGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400';
-  const capPillBg = m.capitalGain >= 0 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300';
+  // Capital reduction is NOT a loss, so neutral slate is used (never red):
+  const capColor = m.capitalGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300';
+  const capPillBg = m.capitalGain >= 0 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+
+  // Red is strictly reserved for an actual financial net loss (totalProfit < 0):
+  const hasNetLoss = m.totalProfit < 0;
+  const card5Html = hasNetLoss ? `
+    <!-- Card 5: Net Financial Loss (Red text and badge) -->
+    <div class="card !p-3 sm:!p-4 border-rose-300 bg-rose-50/50 dark:bg-rose-950/20 col-span-2 lg:col-span-1 shadow-sm">
+      <div class="flex justify-between text-xs text-rose-600 dark:text-rose-400">
+        <span class="font-bold uppercase tracking-wider text-[11px]">Total Loss on Inv</span>
+        <span>⚠️</span>
+      </div>
+      <div class="mt-2 text-lg sm:text-xl font-extrabold text-rose-600 dark:text-rose-400 break-words">${fmt(m.totalProfit)}</div>
+      <div class="mt-1.5 flex items-center gap-1.5">
+        <span class="pill bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300 font-bold text-[10px]">${m.totalReturnPct.toFixed(2)}%</span>
+        <span class="text-[11px] font-semibold text-rose-600 dark:text-rose-400">Net Loss</span>
+      </div>
+    </div>
+  ` : `
+    <!-- Card 5: Net Profit (Gold highlight matching Excel) -->
+    <div class="card !p-3 sm:!p-4 kpi-profit-card col-span-2 lg:col-span-1 shadow-sm">
+      <div class="flex justify-between text-xs">
+        <span class="font-bold uppercase tracking-wider text-[11px]">Total Profit on Inv</span>
+        <span>⭐</span>
+      </div>
+      <div class="mt-2 text-lg sm:text-xl font-extrabold text-slate-900 break-words">+${fmt(m.totalProfit)}</div>
+      <div class="mt-1.5 flex items-center gap-1.5">
+        <span class="pill bg-amber-200 text-amber-900 dark:bg-amber-800 dark:text-amber-100 font-bold text-[10px]">+${m.totalReturnPct.toFixed(2)}%</span>
+        <span class="text-[11px] font-semibold opacity-90">Total Return</span>
+      </div>
+    </div>
+  `;
 
   const kpisHtml = `
     <!-- Card 1: Total Investment -->
@@ -2724,17 +2841,17 @@ function renderInvestments() {
         <span class="font-medium uppercase tracking-wider text-[11px]">Total Investment</span>
         <span>💵</span>
       </div>
-      <div class="mt-2 text-base sm:text-xl font-bold break-words">${fmt(m.netInvestment)}</div>
+      <div class="mt-2 text-base sm:text-xl font-bold text-slate-800 dark:text-slate-100 break-words">${fmt(m.netInvestment)}</div>
       <div class="mt-1.5 text-[11px] text-slate-400">${m.invCount} transactions net</div>
     </div>
 
-    <!-- Card 2: Current Equity Worth (from broker app) -->
+    <!-- Card 2: Current Equity Worth (from broker app) - Neutral slate -->
     <div class="card !p-3 sm:!p-4 border-emerald-500/40 relative">
       <div class="flex justify-between text-xs text-slate-500">
         <span class="font-medium uppercase tracking-wider text-[11px]">Margin Details - Equity</span>
         <button type="button" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline" onclick="openWorthModal('${activePort === 'all' ? 'ktrades' : activePort}')" title="Edit from broker app">✏️</button>
       </div>
-      <div class="mt-2 text-base sm:text-xl font-bold text-rose-600 dark:text-rose-400 break-words">${fmt(m.currentWorth)}</div>
+      <div class="mt-2 text-base sm:text-xl font-bold text-slate-800 dark:text-slate-100 break-words">${fmt(m.currentWorth)}</div>
       <div class="mt-1.5 text-[11px] text-slate-400">Input from broker app</div>
     </div>
 
@@ -2751,11 +2868,11 @@ function renderInvestments() {
       </div>
     </div>
 
-    <!-- Card 4: Capital Gain / Loss -->
+    <!-- Card 4: Capital Gain / Loss (Neutral slate when reduced, emerald when positive) -->
     <div class="card !p-3 sm:!p-4">
       <div class="flex justify-between text-xs text-slate-500">
         <span class="font-medium uppercase tracking-wider text-[11px]">Capital Inc / Loss</span>
-        <span>${m.capitalGain >= 0 ? '📈' : '📉'}</span>
+        <span>${m.capitalGain >= 0 ? '📈' : '📊'}</span>
       </div>
       <div class="mt-2 text-base sm:text-xl font-bold ${capColor} break-words">${capSign}${fmt(m.capitalGain)}</div>
       <div class="mt-1.5 flex items-center gap-1.5">
@@ -2764,18 +2881,7 @@ function renderInvestments() {
       </div>
     </div>
 
-    <!-- Card 5: Total Profit on Investment (Yellow highlight matching Excel) -->
-    <div class="card !p-3 sm:!p-4 kpi-profit-card col-span-2 lg:col-span-1 shadow-sm">
-      <div class="flex justify-between text-xs">
-        <span class="font-bold uppercase tracking-wider text-[11px]">Total Profit on Inv</span>
-        <span>⭐</span>
-      </div>
-      <div class="mt-2 text-lg sm:text-xl font-extrabold break-words">${m.totalProfit >= 0 ? '+' : ''}${fmt(m.totalProfit)}</div>
-      <div class="mt-1.5 flex items-center gap-1.5">
-        <span class="pill bg-amber-200 text-amber-900 dark:bg-amber-800 dark:text-amber-100 font-bold text-[10px]">${m.totalReturnPct.toFixed(2)}%</span>
-        <span class="text-[11px] font-semibold opacity-90">Total Return</span>
-      </div>
-    </div>
+    ${card5Html}
   `;
   $('#investKpis').innerHTML = kpisHtml;
 
@@ -2784,6 +2890,159 @@ function renderInvestments() {
 
   // 3. Render Tables
   renderInvestmentTables();
+}
+
+function donutWithCallouts(id, labels, vals, colors) {
+  const c = prep(id, 0), { x, w, h, t } = c;
+  const tot = vals.reduce((a, b) => a + b, 0);
+  if (!tot) return;
+
+  const cx = w / 2;
+  const cy = h / 2;
+  const isCompact = w < 420;
+  // Radius sized with margin for callout lines & labels
+  const R = Math.min(isCompact ? w * 0.22 : w * 0.25, isCompact ? 68 : 80);
+  const r = R * 0.58;
+
+  let a0 = -Math.PI / 2;
+  const arcs = [];
+  const slices = [];
+
+  vals.forEach((v, i) => {
+    const angle = (v / tot) * Math.PI * 2;
+    const a1 = a0 + angle;
+    const midA = a0 + angle / 2;
+
+    x.beginPath();
+    x.arc(cx, cy, R, a0, a1);
+    x.arc(cx, cy, r, a1, a0, true);
+    x.closePath();
+    x.fillStyle = colors[i];
+    x.fill();
+    x.strokeStyle = t.bg;
+    x.lineWidth = 1.5;
+    x.stroke();
+
+    arcs.push([a0, a1]);
+    slices.push({
+      index: i,
+      label: labels[i],
+      val: v,
+      pct: (v / tot) * 100,
+      color: colors[i],
+      midA,
+      cosA: Math.cos(midA),
+      sinA: Math.sin(midA)
+    });
+    a0 = a1;
+  });
+
+  // Center text in hole
+  x.fillStyle = t.dim || "#94a3b8";
+  x.textAlign = "center";
+  x.textBaseline = "middle";
+  x.font = "10px system-ui, sans-serif";
+  x.fillText("Total Divs", cx, cy - 8);
+  x.fillStyle = t.txt;
+  x.font = "bold 12px system-ui, sans-serif";
+  x.fillText(kfmt(tot), cx, cy + 9);
+
+  // Pick candidate slices for leader lines (>=1.8% or top 6)
+  const candidateSlices = slices.filter(s => s.pct >= 1.8).slice(0, 10);
+  const calloutSlices = candidateSlices.length >= 3 ? candidateSlices : slices.slice(0, 6);
+
+  const rightSide = [];
+  const leftSide = [];
+
+  calloutSlices.forEach(s => {
+    const isRight = s.cosA >= 0;
+    const sx = cx + s.cosA * R;
+    const sy = cy + s.sinA * R;
+    const kx = cx + s.cosA * (R + 12);
+    const ky = cy + s.sinA * (R + 12);
+    const item = { ...s, isRight, sx, sy, kx, ky };
+    if (isRight) rightSide.push(item);
+    else leftSide.push(item);
+  });
+
+  // Distribute right side targets vertically to eliminate overlaps
+  rightSide.sort((a, b) => a.ky - b.ky);
+  let curY = 20;
+  rightSide.forEach(s => {
+    s.targetY = Math.max(s.ky, curY);
+    curY = s.targetY + 24;
+  });
+  if (rightSide.length && rightSide[rightSide.length - 1].targetY > h - 18) {
+    let curBot = h - 18;
+    for (let k = rightSide.length - 1; k >= 0; k--) {
+      rightSide[k].targetY = Math.min(rightSide[k].targetY, curBot);
+      curBot = rightSide[k].targetY - 24;
+    }
+  }
+
+  // Distribute left side targets vertically to eliminate overlaps
+  leftSide.sort((a, b) => a.ky - b.ky);
+  curY = 20;
+  leftSide.forEach(s => {
+    s.targetY = Math.max(s.ky, curY);
+    curY = s.targetY + 24;
+  });
+  if (leftSide.length && leftSide[leftSide.length - 1].targetY > h - 18) {
+    let curBot = h - 18;
+    for (let k = leftSide.length - 1; k >= 0; k--) {
+      leftSide[k].targetY = Math.min(leftSide[k].targetY, curBot);
+      curBot = leftSide[k].targetY - 24;
+    }
+  }
+
+  // Render leader lines and callout text
+  const allCallouts = [...rightSide, ...leftSide];
+  allCallouts.forEach(s => {
+    x.beginPath();
+    x.moveTo(s.sx, s.sy);
+    x.lineTo(s.kx, s.targetY);
+    const endX = s.isRight ? Math.min(w - 6, Math.max(s.kx + 14, cx + R + 22)) : Math.max(6, Math.min(s.kx - 14, cx - R - 22));
+    x.lineTo(endX, s.targetY);
+    x.strokeStyle = s.color;
+    x.lineWidth = 1.3;
+    x.stroke();
+
+    // Dot on donut outer boundary
+    x.beginPath();
+    x.arc(s.sx, s.sy, 2, 0, Math.PI * 2);
+    x.fillStyle = s.color;
+    x.fill();
+
+    // Callout labels
+    x.textBaseline = "middle";
+    if (s.isRight) {
+      x.textAlign = "left";
+      x.font = "bold 10px system-ui, sans-serif";
+      x.fillStyle = s.color;
+      x.fillText(s.label, endX + 4, s.targetY - 6);
+      x.font = "9px system-ui, sans-serif";
+      x.fillStyle = t.txt;
+      x.fillText(`${kfmt(s.val)} (${s.pct.toFixed(0)}%)`, endX + 4, s.targetY + 6);
+    } else {
+      x.textAlign = "right";
+      x.font = "bold 10px system-ui, sans-serif";
+      x.fillStyle = s.color;
+      x.fillText(s.label, endX - 4, s.targetY - 6);
+      x.font = "9px system-ui, sans-serif";
+      x.fillStyle = t.txt;
+      x.fillText(`${kfmt(s.val)} (${s.pct.toFixed(0)}%)`, endX - 4, s.targetY + 6);
+    }
+  });
+
+  // Hit test for tooltip
+  c.cv._hit = (px, py) => {
+    const dx = px - cx, dy = py - cy, d = Math.hypot(dx, dy);
+    if (d < r || d > R + 14) return null;
+    let a = Math.atan2(dy, dx);
+    if (a < -Math.PI / 2) a += Math.PI * 2;
+    const i = arcs.findIndex(s => a >= s[0] && a < s[1]);
+    return i < 0 ? null : `${labels[i]}: ${fmt(vals[i])} (${(vals[i] / tot * 100).toFixed(1)}%)`;
+  };
 }
 
 // Render the 3 Investment Canvas Charts
@@ -2813,11 +3072,19 @@ function renderInvestmentCharts() {
   if (hasDivs) {
     const stockColors = sortedStocks.map(getTickerColor);
     const stockVals = sortedStocks.map(s => divByStock[s]);
-    donut('ci1', sortedStocks, stockVals, stockColors);
-    legend('ci1', sortedStocks.map((s, i) => ({
-      label: `${s}: ${fmt(stockVals[i])} (${((stockVals[i] / totDivs) * 100).toFixed(1)}%)`,
-      color: stockColors[i]
-    })));
+    donutWithCallouts('ci1', sortedStocks, stockVals, stockColors);
+    $('#li1').innerHTML = `
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        ${sortedStocks.map((s, i) => `
+          <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs border border-slate-200 dark:border-slate-700/60">
+            <span class="w-2 h-2 rounded-full shrink-0" style="background:${stockColors[i]}"></span>
+            <span class="font-bold">${esc(s)}</span>
+            <span class="text-slate-600 dark:text-slate-300 font-medium">${fmt(stockVals[i])}</span>
+            <span class="text-[10px] text-slate-400">(${((stockVals[i] / totDivs) * 100).toFixed(1)}%)</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
   }
 
   // --- Chart 2: Capital vs Market Equity vs Total Value Bar Chart ---
@@ -2912,8 +3179,8 @@ function renderInvestmentTables() {
     const isW = iv.type === 'withdrawal' || amt < 0;
     const isAdj = iv.type === 'adjustment';
     const typeLabel = isAdj ? 'Adjustment' : isW ? 'Withdrawal' : 'Deposit';
-    const typeBadge = isAdj ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : isW ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300';
-    const amtColor = isW ? 'text-rose-600 dark:text-rose-400' : 'text-slate-800 dark:text-slate-200';
+    const typeBadge = isAdj ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : isW ? 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300';
+    const amtColor = isW ? 'text-slate-700 dark:text-slate-300' : 'text-slate-800 dark:text-slate-200';
     const amtSign = amt > 0 ? '+' : '';
 
     return `
@@ -3378,9 +3645,11 @@ function updateWorthPreview() {
   $('#prevNetInv').textContent = fmt(m.netInvestment);
   const capEl = $('#prevCapGain');
   capEl.textContent = (newCapGain >= 0 ? '+' : '') + fmt(newCapGain);
-  capEl.className = 'font-semibold ' + (newCapGain >= 0 ? 'text-emerald-600' : 'text-rose-600');
+  capEl.className = 'font-semibold ' + (newCapGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300');
   $('#prevDivs').textContent = fmt(m.totalDividends);
-  $('#prevTotProfit').textContent = (newTotProfit >= 0 ? '+' : '') + fmt(newTotProfit);
+  const totEl = $('#prevTotProfit');
+  totEl.textContent = (newTotProfit >= 0 ? '+' : '') + fmt(newTotProfit);
+  totEl.className = 'font-bold ' + (newTotProfit < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400');
 }
 
 $('#worthPort').onchange = $('#worthAmt').oninput = updateWorthPreview;
