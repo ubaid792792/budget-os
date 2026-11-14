@@ -2629,18 +2629,19 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 // Popular PSX Stock Tickers & colors
 const TICKER_COLORS = {
-  'POL': '#059669',
-  'MEBL': '#0d9488',
-  'FFC': '#16a34a',
-  'DCR': '#7c3aed',
-  'INDU': '#2563eb',
-  'HUBC': '#d97706',
-  'EFERT': '#0891b2',
-  'FABL': '#c026d3',
-  'PPL': '#e11d48',
-  'KAPCO': '#ea580c',
-  'MCBIM': '#9333ea',
-  'NPL': '#475569'
+  'POL': '#10b981',   // Emerald Green
+  'DCR': '#8b5cf6',   // Vivid Violet
+  'MEBL': '#f59e0b',  // Warm Amber Gold (high contrast against emerald & violet)
+  'FFC': '#0284c7',   // Sky Blue (high contrast against amber & emerald)
+  'INDU': '#f43f5e',  // Coral Rose
+  'KAPCO': '#14b8a6', // Crisp Teal
+  'HUBC': '#6366f1',  // Royal Indigo
+  'FABL': '#ea580c',  // Deep Orange
+  'PPL': '#ec4899',   // Electric Pink
+  'EFERT': '#06b6d4', // Cyan
+  'NPL': '#84cc16',   // Bright Lime
+  'MCBIM': '#a855f7', // Purple
+  'Others': '#64748b' // Slate Gray
 };
 
 const POPULAR_TICKERS = ['POL', 'MEBL', 'FFC', 'DCR', 'INDU', 'HUBC', 'EFERT', 'FABL', 'PPL', 'KAPCO', 'MCBIM', 'NPL'];
@@ -2897,47 +2898,87 @@ function donutWithCallouts(id, labels, vals, colors) {
   const tot = vals.reduce((a, b) => a + b, 0);
   if (!tot) return;
 
+  // Consolidate tiny fragments (< 1.8%) into "Others" on the donut to avoid cluttering 0.1-0.2% slivers
+  const displaySlices = [];
+  let othersVal = 0;
+  labels.forEach((label, i) => {
+    const v = vals[i];
+    const pct = (v / tot) * 100;
+    if (pct >= 1.8 || labels.length <= 6) {
+      displaySlices.push({
+        label,
+        val: v,
+        pct,
+        color: colors[i] || getTickerColor(label)
+      });
+    } else {
+      othersVal += v;
+    }
+  });
+
+  if (othersVal > 0) {
+    displaySlices.push({
+      label: "Others",
+      val: othersVal,
+      pct: (othersVal / tot) * 100,
+      color: "#64748b"
+    });
+  }
+
   const cx = w / 2;
   const cy = h / 2;
   const isCompact = w < 420;
-  // Radius sized with margin for callout lines & labels
-  const R = Math.min(isCompact ? w * 0.22 : w * 0.25, isCompact ? 68 : 80);
+  // Size outer radius with generous margin for radial callouts
+  const R = Math.min(isCompact ? w * 0.20 : w * 0.23, isCompact ? 64 : 76);
   const r = R * 0.58;
+  const midR = (R + r) / 2;
 
   let a0 = -Math.PI / 2;
   const arcs = [];
-  const slices = [];
 
-  vals.forEach((v, i) => {
-    const angle = (v / tot) * Math.PI * 2;
+  // 1. Draw Donut Slices and Inside-Slice Percentage Labels (Reference Style)
+  displaySlices.forEach(s => {
+    const angle = (s.val / tot) * Math.PI * 2;
     const a1 = a0 + angle;
     const midA = a0 + angle / 2;
+    s.a0 = a0;
+    s.a1 = a1;
+    s.midA = midA;
+    s.cosA = Math.cos(midA);
+    s.sinA = Math.sin(midA);
 
+    // Slice arc
     x.beginPath();
     x.arc(cx, cy, R, a0, a1);
     x.arc(cx, cy, r, a1, a0, true);
     x.closePath();
-    x.fillStyle = colors[i];
+    x.fillStyle = s.color;
     x.fill();
     x.strokeStyle = t.bg;
     x.lineWidth = 1.5;
     x.stroke();
 
     arcs.push([a0, a1]);
-    slices.push({
-      index: i,
-      label: labels[i],
-      val: v,
-      pct: (v / tot) * 100,
-      color: colors[i],
-      midA,
-      cosA: Math.cos(midA),
-      sinA: Math.sin(midA)
-    });
+
+    // Inside label for major slices (>= 4.5%) matching Highcharts reference image
+    if (s.pct >= 4.5 && angle >= 0.28) {
+      const ix = cx + s.cosA * midR;
+      const iy = cy + s.sinA * midR;
+      x.save();
+      x.shadowColor = "rgba(0, 0, 0, 0.45)";
+      x.shadowBlur = 3;
+      x.fillStyle = "#ffffff";
+      x.font = "bold 11px system-ui, sans-serif";
+      x.textAlign = "center";
+      x.textBaseline = "middle";
+      x.fillText(Math.round(s.pct) + "%", ix, iy);
+      x.restore();
+    }
+
     a0 = a1;
   });
 
-  // Center text in hole
+  // 2. Center Text inside Donut Hole
   x.fillStyle = t.dim || "#94a3b8";
   x.textAlign = "center";
   x.textBaseline = "middle";
@@ -2947,101 +2988,75 @@ function donutWithCallouts(id, labels, vals, colors) {
   x.font = "bold 12px system-ui, sans-serif";
   x.fillText(kfmt(tot), cx, cy + 9);
 
-  // Pick candidate slices for leader lines (>=1.8% or top 6)
-  const candidateSlices = slices.filter(s => s.pct >= 1.8).slice(0, 10);
-  const calloutSlices = candidateSlices.length >= 3 ? candidateSlices : slices.slice(0, 6);
+  // 3. Subtle Connector Lines & Exterior Labels (Radial Spoke Model - Mathematically Zero Crossings)
+  const connectorColor = t.dark ? "rgba(148, 163, 184, 0.65)" : "rgba(100, 116, 139, 0.65)";
+  const dotColor = t.dark ? "#94a3b8" : "#64748b";
 
-  const rightSide = [];
-  const leftSide = [];
-
-  calloutSlices.forEach(s => {
+  displaySlices.forEach(s => {
     const isRight = s.cosA >= 0;
-    const sx = cx + s.cosA * R;
-    const sy = cy + s.sinA * R;
-    const kx = cx + s.cosA * (R + 12);
-    const ky = cy + s.sinA * (R + 12);
-    const item = { ...s, isRight, sx, sy, kx, ky };
-    if (isRight) rightSide.push(item);
-    else leftSide.push(item);
-  });
+    const deg = ((s.midA * 180 / Math.PI) + 360) % 360;
 
-  // Distribute right side targets vertically to eliminate overlaps
-  rightSide.sort((a, b) => a.ky - b.ky);
-  let curY = 20;
-  rightSide.forEach(s => {
-    s.targetY = Math.max(s.ky, curY);
-    curY = s.targetY + 24;
-  });
-  if (rightSide.length && rightSide[rightSide.length - 1].targetY > h - 18) {
-    let curBot = h - 18;
-    for (let k = rightSide.length - 1; k >= 0; k--) {
-      rightSide[k].targetY = Math.min(rightSide[k].targetY, curBot);
-      curBot = rightSide[k].targetY - 24;
+    // Base radial spoke extension
+    let rad = isCompact ? 16 : 20;
+
+    // For slices crowded in the top-left quadrant (deg between 210 and 270),
+    // fan out progressively so top labels never collide vertically
+    if (!isRight && deg > 210 && deg <= 270) {
+      rad += (deg - 210) * 1.15;
     }
-  }
 
-  // Distribute left side targets vertically to eliminate overlaps
-  leftSide.sort((a, b) => a.ky - b.ky);
-  curY = 20;
-  leftSide.forEach(s => {
-    s.targetY = Math.max(s.ky, curY);
-    curY = s.targetY + 24;
-  });
-  if (leftSide.length && leftSide[leftSide.length - 1].targetY > h - 18) {
-    let curBot = h - 18;
-    for (let k = leftSide.length - 1; k >= 0; k--) {
-      leftSide[k].targetY = Math.min(leftSide[k].targetY, curBot);
-      curBot = leftSide[k].targetY - 24;
-    }
-  }
+    // Point 1: Anchor dot on outer donut perimeter
+    const p1x = cx + s.cosA * R;
+    const p1y = cy + s.sinA * R;
 
-  // Render leader lines and callout text
-  const allCallouts = [...rightSide, ...leftSide];
-  allCallouts.forEach(s => {
+    // Point 2: Radial spoke endpoint along natural slice angle
+    const p2x = cx + s.cosA * (R + rad);
+    const p2y = cy + s.sinA * (R + rad);
+
+    // Point 3: Horizontal elbow toward label
+    const elbowLen = isCompact ? 10 : 14;
+    const p3x = p2x + (isRight ? elbowLen : -elbowLen);
+    const p3y = p2y;
+
+    // Draw thin, elegant connector line
     x.beginPath();
-    x.moveTo(s.sx, s.sy);
-    x.lineTo(s.kx, s.targetY);
-    const endX = s.isRight ? Math.min(w - 6, Math.max(s.kx + 14, cx + R + 22)) : Math.max(6, Math.min(s.kx - 14, cx - R - 22));
-    x.lineTo(endX, s.targetY);
-    x.strokeStyle = s.color;
-    x.lineWidth = 1.3;
+    x.moveTo(p1x, p1y);
+    x.lineTo(p2x, p2y);
+    x.lineTo(p3x, p3y);
+    x.strokeStyle = connectorColor;
+    x.lineWidth = 1.2;
     x.stroke();
 
-    // Dot on donut outer boundary
+    // Small perimeter anchor dot matching reference image
     x.beginPath();
-    x.arc(s.sx, s.sy, 2, 0, Math.PI * 2);
-    x.fillStyle = s.color;
+    x.arc(p1x, p1y, 2, 0, Math.PI * 2);
+    x.fillStyle = dotColor;
     x.fill();
 
-    // Callout labels
+    // Exterior label text
     x.textBaseline = "middle";
-    if (s.isRight) {
-      x.textAlign = "left";
-      x.font = "bold 10px system-ui, sans-serif";
-      x.fillStyle = s.color;
-      x.fillText(s.label, endX + 4, s.targetY - 6);
-      x.font = "9px system-ui, sans-serif";
-      x.fillStyle = t.txt;
-      x.fillText(`${kfmt(s.val)} (${s.pct.toFixed(0)}%)`, endX + 4, s.targetY + 6);
-    } else {
-      x.textAlign = "right";
-      x.font = "bold 10px system-ui, sans-serif";
-      x.fillStyle = s.color;
-      x.fillText(s.label, endX - 4, s.targetY - 6);
-      x.font = "9px system-ui, sans-serif";
-      x.fillStyle = t.txt;
-      x.fillText(`${kfmt(s.val)} (${s.pct.toFixed(0)}%)`, endX - 4, s.targetY + 6);
-    }
+    const textX = p3x + (isRight ? 4 : -4);
+    x.textAlign = isRight ? "left" : "right";
+
+    // Line 1: Stock symbol in bold accent color
+    x.font = "bold 10.5px system-ui, sans-serif";
+    x.fillStyle = s.color;
+    x.fillText(s.label, textX, p3y - 6);
+
+    // Line 2: Value and percentage in clean theme typography
+    x.font = "9px system-ui, sans-serif";
+    x.fillStyle = t.txt;
+    x.fillText(`${kfmt(s.val)} (${s.pct.toFixed(1)}%)`, textX, p3y + 6);
   });
 
-  // Hit test for tooltip
+  // 4. Hit Test for Tooltips
   c.cv._hit = (px, py) => {
     const dx = px - cx, dy = py - cy, d = Math.hypot(dx, dy);
-    if (d < r || d > R + 14) return null;
+    if (d < r || d > R + 36) return null;
     let a = Math.atan2(dy, dx);
     if (a < -Math.PI / 2) a += Math.PI * 2;
     const i = arcs.findIndex(s => a >= s[0] && a < s[1]);
-    return i < 0 ? null : `${labels[i]}: ${fmt(vals[i])} (${(vals[i] / tot * 100).toFixed(1)}%)`;
+    return i < 0 ? null : `${displaySlices[i].label}: ${fmt(displaySlices[i].val)} (${displaySlices[i].pct.toFixed(1)}%)`;
   };
 }
 
