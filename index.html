@@ -269,6 +269,50 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
 .lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .lg\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}
 }
+
+/* ===== Investment & Portfolio Styling ===== */
+.main-nav { display: inline-flex; align-items: center; gap: .25rem; padding: .25rem; border-radius: .75rem; background: #f1f5f9; border: 1px solid #e2e8f0; }
+.dark .main-nav { background: #0f172a; border-color: #1e293b; }
+.nav-btn { display: inline-flex; align-items: center; gap: .375rem; padding: .35rem .85rem; border-radius: .625rem; font-weight: 600; font-size: .8125rem; cursor: pointer; transition: all .15s ease; border: 1px solid transparent; color: #64748b; background: transparent; }
+.nav-btn:hover { color: #0f172a; }
+.dark .nav-btn { color: #94a3b8; background: transparent; }
+.dark .nav-btn:hover { color: #f1f5f9; }
+.nav-btn.active { background: #ffffff; color: #0f172a; border-color: #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.dark .nav-btn.active { background: #1e293b; color: #34d399; border-color: #334155; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+
+.table-view-toggle { display: inline-flex; align-items: center; background: #f1f5f9; border-radius: .5rem; padding: .125rem; border: 1px solid #e2e8f0; }
+.dark .table-view-toggle { background: #0f172a; border-color: #1e293b; }
+.tab-toggle-btn { padding: .25rem .65rem; border-radius: .375rem; font-size: .75rem; font-weight: 500; color: #64748b; background: transparent; transition: all .15s ease; border: 1px solid transparent; cursor: pointer; }
+.dark .tab-toggle-btn { color: #94a3b8; }
+.tab-toggle-btn.active { background: #ffffff; color: #0f172a; border-color: #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,.05); font-weight: 600; }
+.dark .tab-toggle-btn.active { background: #1e293b; color: #34d399; border-color: #334155; font-weight: 600; }
+.port-tab { display: inline-flex; align-items: center; gap: .375rem; padding: .45rem .875rem; border-radius: .75rem; font-size: .8125rem; font-weight: 600; border: 1px solid #e2e8f0; background: rgba(255,255,255,.7); color: #64748b; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.port-tab:hover { background: #fff; color: #0f172a; }
+.port-tab.active { background: #10b981; color: #fff; border-color: #10b981; box-shadow: 0 2px 4px rgba(16,185,129,.25); }
+.dark .port-tab { background: rgba(30,41,59,.7); border-color: #334155; color: #94a3b8; }
+.dark .port-tab:hover { background: #1e293b; color: #f1f5f9; }
+.dark .port-tab.active { background: #10b981; color: #fff; border-color: #10b981; }
+
+.inv-table-wrap { overflow-x: auto; max-height: 480px; border-radius: .75rem; border: 1px solid #e2e8f0; }
+.dark .inv-table-wrap { border-color: #1e293b; }
+.inv-table { width: 100%; text-align: left; font-size: .8125rem; border-collapse: separate; border-spacing: 0; min-width: 480px; }
+.inv-table th { position: sticky; top: 0; z-index: 10; background: #f8fafc; padding: .625rem .75rem; font-weight: 600; font-size: .7rem; text-transform: uppercase; letter-spacing: .03em; color: #64748b; border-bottom: 1px solid #e2e8f0; }
+.dark .inv-table th { background: #0f172a; color: #94a3b8; border-color: #1e293b; }
+.inv-table td { padding: .625rem .75rem; border-bottom: 1px solid #f1f5f9; color: #334155; }
+.dark .inv-table td { border-color: #1e293b; color: #cbd5e1; }
+.inv-table tr:hover td { background: rgba(241,245,249,.6); }
+.dark .inv-table tr:hover td { background: rgba(30,41,59,.4); }
+.inv-table tfoot th, .inv-table tfoot td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; font-weight: 700; border-top: 2px solid #e2e8f0; border-bottom: 0; }
+.dark .inv-table tfoot th, .dark .inv-table tfoot td { background: #0f172a; border-color: #334155; }
+
+.ticker-badge { display: inline-flex; align-items: center; justify-content: center; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: .75rem; font-weight: 700; padding: .15rem .5rem; border-radius: .375rem; letter-spacing: .03em; white-space: nowrap; }
+.ticker-chip { display: inline-flex; align-items: center; padding: .25rem .55rem; border-radius: .5rem; font-size: .75rem; font-weight: 600; cursor: pointer; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; transition: all .1s; }
+.dark .ticker-chip { background: #1e293b; color: #cbd5e1; border-color: #475569; }
+.ticker-chip:hover, .ticker-chip.active { background: #10b981; color: #fff; border-color: #059669; }
+
+.kpi-profit-card { background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%); border: 1px solid #fde047; color: #713f12; }
+.dark .kpi-profit-card { background: linear-gradient(135deg, rgba(113,63,18,.35) 0%, rgba(133,77,14,.4) 100%); border: 1px solid rgba(234,179,8,.35); color: #fef08a; }
+
 </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen antialiased">
@@ -277,21 +321,30 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
   <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
     <div class="flex items-center gap-2 min-w-0">
       <div class="w-8 h-8 rounded-xl bg-emerald-500 text-white grid place-items-center font-bold shrink-0">B</div>
-      <span class="font-semibold tracking-tight truncate">Budget OS</span>
+      <span class="font-semibold tracking-tight truncate hidden sm:inline">Budget OS</span>
     </div>
+    
+    <!-- Top-level Navigation: Budget vs Investment -->
+    <nav class="main-nav" role="tablist" aria-label="Main Navigation">
+      <button id="navBudgetBtn" role="tab" aria-selected="true" type="button" class="nav-btn active">💳 Budget</button>
+      <button id="navInvestBtn" role="tab" aria-selected="false" type="button" class="nav-btn">📈 Investment</button>
+    </nav>
+
     <div class="flex items-center gap-2 sm:gap-3">
-      <div class="text-right leading-tight">
-        <div class="text-[10px] uppercase tracking-wide text-slate-500">This month</div>
+      <div class="text-right leading-tight" id="hdrMetricBox">
+        <div id="hdrMetricLbl" class="text-[10px] uppercase tracking-wide text-slate-500">This month</div>
         <div id="netBal" class="text-sm font-semibold">PKR 0</div>
       </div>
       <button id="themeBtn" class="btn-s !px-2.5" aria-label="Toggle dark mode">🌙</button>
       <button id="newBtnD" class="btn-p hidden sm:inline-flex">+ New Entry</button>
+      <button id="newInvestBtnD" class="btn-p hidden !bg-emerald-600 sm:hidden">+ Action</button>
     </div>
   </div>
   <button id="syncBar" type="button" class="syncbar" data-st="none"><i></i><span id="syncTxt"></span></button>
 </header>
 
 <main class="max-w-6xl mx-auto px-4 py-5 space-y-5">
+  <div id="budgetView" class="space-y-5">
   <!-- KPIs -->
   <section id="kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></section>
   <section id="kpis2" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></section>
@@ -384,7 +437,186 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
     <form id="catForm" class="flex gap-2 mb-4"><input id="catNew" class="inp" placeholder="New category name" maxlength="40"><button class="btn-s" style="white-space:nowrap">+ Add category</button></form>
     <div id="budList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
   </div></details>
+  </div><!-- /#budgetView -->
 
+  <!-- Investment Portal -->
+  <div id="investView" class="space-y-5 hidden">
+    <!-- Portfolio Selector & Actions Bar -->
+    <section class="card !p-3 sm:!p-4 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-1.5 overflow-x-auto noscroll py-0.5" role="tablist" aria-label="Investment Portfolios">
+        <button type="button" role="tab" class="port-tab active" data-port="all" id="tabPortAll">
+          <span>🌐</span> All Portfolios
+        </button>
+        <button type="button" role="tab" class="port-tab" data-port="ktrades" id="tabPortKtrades">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span> KTrades
+        </button>
+        <button type="button" role="tab" class="port-tab" data-port="akd" id="tabPortAkd">
+          <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span> AKD
+        </button>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button type="button" id="btnUpdateWorth" class="btn-s text-xs font-semibold !py-1.5 !px-3" title="Update margin/equity worth from broker app">
+          ⚡ Margin Details - Equity
+        </button>
+        <button type="button" id="btnAddInv" class="btn-s text-xs font-semibold !py-1.5 !px-3">
+          + Investment
+        </button>
+        <button type="button" id="btnAddDiv" class="btn-p text-xs font-semibold !py-1.5 !px-3">
+          + Dividend
+        </button>
+        <div class="relative inline-block" id="investMenuWrap">
+          <button type="button" id="btnInvestMore" class="btn-s text-xs !py-1.5 !px-2.5" title="More options">•••</button>
+          <div id="investMenu" class="hidden absolute right-0 top-full mt-1 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl p-1.5 z-40 text-xs">
+            <button type="button" id="btnExportInvCsv" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">⬇ Export to CSV</button>
+            <button type="button" id="btnExportInvJson" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">⬇ Export to JSON</button>
+            <button type="button" id="btnReloadExcel" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2 text-emerald-600 dark:text-emerald-400">✨ Reset to Excel Data</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Banner / Status Details -->
+    <div class="flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span id="portBadge" class="pill bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold uppercase tracking-wider text-[11px]">All Accounts</span>
+        <span id="portSubtitle">Consolidated KTrades &amp; AKD Portfolios</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-slate-400">Broker App Equity:</span>
+        <span id="equityValLabel" class="font-semibold text-rose-600 dark:text-rose-400">PKR 0</span>
+        <button type="button" id="btnInlineEditWorth" class="text-emerald-600 dark:text-emerald-400 hover:underline text-[11px] font-medium">Update</button>
+      </div>
+    </div>
+
+    <!-- Summary KPI Cards (Dashboard) -->
+    <section id="investKpis" class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <!-- Generated dynamically: Total Investment, Current Equity, Total Dividends, Capital Inc, Total Profit -->
+    </section>
+
+    <!-- Visual Analytics & Charts Row -->
+    <section class="grid lg:grid-cols-3 gap-4">
+      <!-- Stock Dividend Contribution Donut -->
+      <div class="card lg:col-span-1">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-semibold text-sm">Dividends by Stock</h2>
+          <span class="text-xs text-slate-400" id="ci1Subtitle">All Stocks</span>
+        </div>
+        <div class="cvbox" style="height:15rem">
+          <div class="cvscroll"><div class="cv"><canvas id="ci1"></canvas></div></div>
+          <div id="ei1" class="empty hidden"></div>
+        </div>
+        <div id="li1" class="legend max-h-24 overflow-y-auto noscroll mt-2"></div>
+      </div>
+
+      <!-- Capital vs Value Performance Comparison Bar Chart -->
+      <div class="card lg:col-span-1">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-semibold text-sm">Capital vs Total Value</h2>
+          <span class="text-xs text-slate-400">Return Breakdown</span>
+        </div>
+        <div class="cvbox" style="height:15rem">
+          <div class="cvscroll"><div class="cv"><canvas id="ci2"></canvas></div></div>
+          <div id="ei2" class="empty hidden"></div>
+        </div>
+        <div id="li2" class="legend mt-2"></div>
+      </div>
+
+      <!-- Monthly Dividend Timeline Bar Chart -->
+      <div class="card lg:col-span-1">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-semibold text-sm">Monthly Dividend Inflow</h2>
+          <span class="text-xs text-slate-400">Cash Flow Timeline</span>
+        </div>
+        <div class="cvbox" style="height:15rem">
+          <div class="cvscroll"><div class="cv"><canvas id="ci3"></canvas></div></div>
+          <div id="ei3" class="empty hidden"></div>
+        </div>
+        <div id="li3" class="legend mt-2"></div>
+      </div>
+    </section>
+
+    <!-- Data Tables Section (Side-by-Side Excel View or Tabbed) -->
+    <section class="card !p-0 overflow-hidden">
+      <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-semibold" id="tableSecTitle">Portfolio Transactions &amp; Dividends</h2>
+          <p class="text-xs text-slate-400">Capital injections, cash withdrawals, adjustments, and dividend credits.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="table-view-toggle">
+            <button type="button" id="btnViewSplit" class="tab-toggle-btn active">Side-by-Side</button>
+            <button type="button" id="btnViewInvs" class="tab-toggle-btn">Investments</button>
+            <button type="button" id="btnViewDivs" class="tab-toggle-btn">Dividends</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 sm:p-5">
+        <div class="grid lg:grid-cols-2 gap-5" id="splitGrid">
+          <!-- Left Column: Investments Table -->
+          <div class="space-y-2.5" id="invCol">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-sm">💵 Capital Inflows &amp; Outflows</span>
+                <span class="pill bg-slate-100 dark:bg-slate-800 text-xs text-slate-500" id="invCountBadge">0 entries</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="text" id="invSearch" placeholder="Search..." class="inp !py-1 !px-2 text-xs !w-28 sm:!w-36">
+                <button type="button" id="btnQuickAddInv" class="btn-s !py-1 !px-2 text-xs">+ Add</button>
+              </div>
+            </div>
+            <div class="inv-table-wrap" tabindex="0" role="region" aria-label="Capital Investment Table">
+              <table class="inv-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th class="text-right">Amount (PKR)</th>
+                    <th>Note</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="invTableBody"></tbody>
+                <tfoot id="invTableFoot"></tfoot>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right Column: Dividends Table -->
+          <div class="space-y-2.5" id="divCol">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-sm">🎁 Dividends Credited</span>
+                <span class="pill bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-xs" id="divCountBadge">0 entries</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="divSymbolFilter" class="inp !py-1 !px-2 text-xs !w-24 sm:!w-28">
+                  <option value="">All Stocks</option>
+                </select>
+                <input type="text" id="divSearch" placeholder="Search..." class="inp !py-1 !px-2 text-xs !w-24 sm:!w-32">
+                <button type="button" id="btnQuickAddDiv" class="btn-p !py-1 !px-2 text-xs">+ Add</button>
+              </div>
+            </div>
+            <div class="inv-table-wrap" tabindex="0" role="region" aria-label="Dividends Credited Table">
+              <table class="inv-table">
+                <thead>
+                  <tr>
+                    <th>Payment Date</th>
+                    <th>Share Symbol</th>
+                    <th class="text-right">Div Credit (PKR)</th>
+                    <th>Note</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="divTableBody"></tbody>
+                <tfoot id="divTableFoot"></tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div><!-- /#investView -->
 
 </main>
 
@@ -473,6 +705,128 @@ table{border-collapse:collapse}ul{list-style:none}summary{list-style:revert}
     <div class="flex items-center justify-between"><h3 id="recTitle" class="font-semibold text-lg"></h3><button type="button" id="recClose" class="btn-s !px-2.5 !py-1.5" aria-label="Close">✕</button></div>
     <div id="recBody" class="space-y-4"></div>
     <div class="flex gap-2 pt-1"><button type="button" id="recCancel" class="btn-s flex-1">Cancel</button><button class="btn-p flex-1">Save</button></div>
+  </form>
+</div>
+
+
+<!-- Investment Modal -->
+<div id="invOvl" class="ovl closed fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center hidden">
+  <form id="invForm" class="sheet closed bg-white dark:bg-slate-900 w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl shadow-xl max-h-[92vh] overflow-y-auto p-5 space-y-4" novalidate>
+    <div class="flex items-center justify-between">
+      <h3 id="invModalTitle" class="font-semibold text-lg">Add Capital / Investment</h3>
+      <button type="button" id="invClose" class="btn-s !px-2.5 !py-1.5" aria-label="Close">✕</button>
+    </div>
+    <div>
+      <label class="lbl" for="invPort">Portfolio</label>
+      <select id="invPort" class="inp">
+        <option value="ktrades">KTrades</option>
+        <option value="akd">AKD</option>
+      </select>
+    </div>
+    <div>
+      <label class="lbl">Transaction Type</label>
+      <div class="grid grid-cols-3 gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl" id="invTypeSeg">
+        <button type="button" data-type="investment" class="seg rounded-lg py-1.5 text-xs font-semibold on">Investment (+)</button>
+        <button type="button" data-type="withdrawal" class="seg rounded-lg py-1.5 text-xs font-semibold">Withdrawal (-)</button>
+        <button type="button" data-type="adjustment" class="seg rounded-lg py-1.5 text-xs font-semibold">Adjustment</button>
+      </div>
+    </div>
+    <div>
+      <label class="lbl" for="invAmt">Amount (PKR) *</label>
+      <input id="invAmt" type="number" step="any" min="0" inputmode="decimal" class="inp" placeholder="e.g. 500000">
+      <p id="invAmtErr" class="text-xs text-rose-500 mt-1 hidden">Enter a valid amount above 0</p>
+    </div>
+    <div>
+      <label class="lbl" for="invDate">Date</label>
+      <input id="invDate" type="date" class="inp">
+    </div>
+    <div>
+      <label class="lbl" for="invNote">Note / Description</label>
+      <input id="invNote" class="inp" placeholder="e.g. Deposit, Monthly addition, etc.">
+    </div>
+    <div class="flex gap-2 pt-1">
+      <button type="button" id="invCancel" class="btn-s flex-1">Cancel</button>
+      <button type="submit" class="btn-p flex-1" id="invSaveBtn">Save</button>
+    </div>
+  </form>
+</div>
+
+<!-- Dividend Modal -->
+<div id="divOvl" class="ovl closed fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center hidden">
+  <form id="divForm" class="sheet closed bg-white dark:bg-slate-900 w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl shadow-xl max-h-[92vh] overflow-y-auto p-5 space-y-4" novalidate>
+    <div class="flex items-center justify-between">
+      <h3 id="divModalTitle" class="font-semibold text-lg">Add Dividend Received</h3>
+      <button type="button" id="divClose" class="btn-s !px-2.5 !py-1.5" aria-label="Close">✕</button>
+    </div>
+    <div>
+      <label class="lbl" for="divPort">Portfolio</label>
+      <select id="divPort" class="inp">
+        <option value="ktrades">KTrades</option>
+        <option value="akd">AKD</option>
+      </select>
+    </div>
+    <div>
+      <label class="lbl" for="divSymbol">Share / Stock Symbol *</label>
+      <input id="divSymbol" class="inp uppercase" placeholder="e.g. POL, MEBL, FFC, DCR..." maxlength="12" autocomplete="off">
+      <div class="mt-2 flex flex-wrap gap-1.5" id="tickerQuickChips">
+        <!-- populated with quick chips: POL, MEBL, FFC, DCR, INDU, HUBC, EFERT, FABL, PPL, KAPCO -->
+      </div>
+      <p id="divSymbolErr" class="text-xs text-rose-500 mt-1 hidden">Stock symbol is required</p>
+    </div>
+    <div>
+      <label class="lbl" for="divAmt">Dividend Credited (PKR Net) *</label>
+      <input id="divAmt" type="number" step="any" min="0" inputmode="decimal" class="inp" placeholder="e.g. 28381">
+      <p id="divAmtErr" class="text-xs text-rose-500 mt-1 hidden">Enter a valid dividend amount above 0</p>
+    </div>
+    <div>
+      <label class="lbl" for="divDate">Date of Dividend Payment</label>
+      <input id="divDate" type="date" class="inp">
+    </div>
+    <div>
+      <label class="lbl" for="divNote">Note (optional)</label>
+      <input id="divNote" class="inp" placeholder="e.g. Interim, FY25 Final, etc.">
+    </div>
+    <div class="flex gap-2 pt-1">
+      <button type="button" id="divCancel" class="btn-s flex-1">Cancel</button>
+      <button type="submit" class="btn-p flex-1" id="divSaveBtn">Save</button>
+    </div>
+  </form>
+</div>
+
+<!-- Equity Worth Modal -->
+<div id="worthOvl" class="ovl closed fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center hidden">
+  <form id="worthForm" class="sheet closed bg-white dark:bg-slate-900 w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl shadow-xl max-h-[92vh] overflow-y-auto p-5 space-y-4" novalidate>
+    <div class="flex items-center justify-between">
+      <h3 class="font-semibold text-lg">Update Portfolio Worth</h3>
+      <button type="button" id="worthClose" class="btn-s !px-2.5 !py-1.5" aria-label="Close">✕</button>
+    </div>
+    <p class="text-xs text-slate-500">Enter the current margin / equity total worth displayed in your broker mobile app (e.g. KTrade or AKD Trade).</p>
+    <div>
+      <label class="lbl" for="worthPort">Portfolio</label>
+      <select id="worthPort" class="inp">
+        <option value="ktrades">KTrades</option>
+        <option value="akd">AKD</option>
+      </select>
+    </div>
+    <div>
+      <label class="lbl" for="worthAmt">Margin Details - Total Worth / Equity (PKR) *</label>
+      <input id="worthAmt" type="number" step="any" min="0" inputmode="decimal" class="inp text-base font-semibold" placeholder="e.g. 8187220">
+      <p id="worthErr" class="text-xs text-rose-500 mt-1 hidden">Enter a valid equity amount</p>
+    </div>
+    <div class="card !p-3 bg-slate-50 dark:bg-slate-800/60 text-xs space-y-1.5" id="worthCalcPreview">
+      <div class="flex justify-between text-slate-500"><span>Total Net Investment:</span><span id="prevNetInv" class="font-semibold text-slate-700 dark:text-slate-300">--</span></div>
+      <div class="flex justify-between text-slate-500"><span>Capital Gain / Loss:</span><span id="prevCapGain" class="font-semibold">--</span></div>
+      <div class="flex justify-between text-slate-500"><span>Dividends Earned:</span><span id="prevDivs" class="font-semibold text-emerald-600">--</span></div>
+      <div class="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-1.5 font-bold"><span>Total Profit:</span><span id="prevTotProfit" class="text-amber-600 dark:text-amber-400">--</span></div>
+    </div>
+    <div>
+      <label class="lbl" for="worthNote">Note</label>
+      <input id="worthNote" class="inp" placeholder="e.g. Checked from mobile app">
+    </div>
+    <div class="flex gap-2 pt-1">
+      <button type="button" id="worthCancel" class="btn-s flex-1">Cancel</button>
+      <button type="submit" class="btn-p flex-1">Update Worth</button>
+    </div>
   </form>
 </div>
 
@@ -566,7 +920,7 @@ if (!categories.some(c => ZRE.test(c))) categories.push(zakat.cat);   // make su
 let range = 6, tab = null, editBud = null;
 const F = { q: '', cat: '', tag: '', type: '', sort: 'date-desc' };
 
-const persist = () => { save('finance_entries', entries); save('finance_categories', categories); save('finance_budgets', budgets); save('finance_tags', tags); save('finance_zakat', zakat); save('finance_people', people); save('finance_loans', loans); cloudPush(); };
+const persist = () => { save('finance_entries', entries); save('finance_categories', categories); save('finance_budgets', budgets); save('finance_tags', tags); save('finance_zakat', zakat); save('finance_people', people); save('finance_loans', loans); save('finance_investments', investments); cloudPush(); };
 const catColor = c => PAL[Math.max(0, categories.indexOf(c)) % PAL.length];
 
 /* ========= theme ========= */
@@ -1255,7 +1609,7 @@ function renderBackupInfo() {
 /* ========= data manager ========= */
 function download(name, text, mime) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: mime })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
 const stamp = () => new Date().toISOString().slice(0, 10);
-$('#expJson').onclick = () => { download(`budget-os-${stamp()}.json`, JSON.stringify({ app: 'budget-os', version: 2, exportedAt: new Date().toISOString(), entries, categories, budgets, tags, zakat, people, loans }, null, 2), 'application/json'); toast('JSON exported'); };
+$('#expJson').onclick = () => { download(`budget-os-${stamp()}.json`, JSON.stringify({ app: 'budget-os', version: 2, exportedAt: new Date().toISOString(), entries, categories, budgets, tags, zakat, people, loans, investments }, null, 2), 'application/json'); toast('JSON exported'); };
 $('#expCsv').onclick = () => {
   const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
   const rows = [['id', 'date', 'title', 'type', 'amount', 'category', 'tags', 'note']].concat(entries.map(e => [e.id, e.date, e.title, e.type, e.amount, e.category, (e.tags || []).join('; '), e.note || '']));
@@ -1272,7 +1626,7 @@ $('#impFile').onchange = async e => {
   if (!mode) return;
   if (mode === 'replace') { entries = clean; categories = Array.isArray(d.categories) && d.categories.length ? d.categories.slice() : categories; budgets = d.budgets && typeof d.budgets === 'object' && !Array.isArray(d.budgets) ? d.budgets : {}; tags = Array.isArray(d.tags) ? d.tags.slice() : []; }
   else { const ids = new Set(entries.map(x => x.id)); clean.forEach(x => { if (!ids.has(x.id)) { entries.push(x); ids.add(x.id); } }); if (Array.isArray(d.categories)) categories = [...new Set([...categories, ...d.categories])]; if (d.budgets && typeof d.budgets === 'object') budgets = { ...d.budgets, ...budgets }; if (Array.isArray(d.tags)) tags = [...new Set([...tags, ...d.tags])]; }
-  if (d && !Array.isArray(d)) { const r = metaDefaults(d); if (mode === 'replace') { zakat = r.zakat; people = r.people; loans = r.loans; } else { zakat = { target: zakat.target || r.zakat.target, cat: zakat.cat, cats: zakat.cats || r.zakat.cats, entries: byId(zakat.entries, r.zakat.entries), copied: [...new Set([...zakat.copied, ...r.zakat.copied])] }; people = byId(people, r.people); loans = byId(loans, r.loans); } }
+  if (d && !Array.isArray(d)) { const r = metaDefaults(d); if (mode === 'replace') { zakat = r.zakat; people = r.people; loans = r.loans; } else { zakat = { target: zakat.target || r.zakat.target, cat: zakat.cat, cats: zakat.cats || r.zakat.cats, entries: byId(zakat.entries, r.zakat.entries), copied: [...new Set([...zakat.copied, ...r.zakat.copied])] }; people = byId(people, r.people); loans = byId(loans, r.loans); if (r.investments) investments = r.investments; } }
   categories = [...new Set([...categories, ...entries.map(x => x.category).filter(Boolean)])]; tags = [...new Set([...tags, ...entries.flatMap(x => x.tags)])];
   persist(); renderAll(); toast('Import complete (' + mode + ')');
 };
@@ -1303,7 +1657,7 @@ $('#sample').onclick = async () => {
 };
 
 /* ========= master render ========= */
-function renderAll() { zakatSync(); renderTop(); renderKpis2(); renderZakat(); renderLoans(); renderCharts(); renderBudgetUI(); renderTagList(); renderTabs(); renderView(); renderBackupInfo(); }
+function renderAll() { zakatSync(); renderTop(); renderKpis2(); renderZakat(); renderLoans(); renderCharts(); renderBudgetUI(); renderTagList(); renderTabs(); renderView(); renderBackupInfo(); renderInvestments(); }
 
 /* ========= init ========= */
 /* ========= Firebase cloud sync (optional; app is fully local without it) ========= */
@@ -1328,7 +1682,7 @@ function cloudPush() {
       for (const id of [...cloud.eMap.keys()]) if (!cur.has(id)) { cloud.eMap.delete(id); cloud.pending = true; cloud.api.delEntry(id).catch(cloudErr); }
     }
     if (cloud.mReady) {
-      const m = { categories, tags, budgets, zakat, people, loans }, j = canon(m);
+      const m = { categories, tags, budgets, zakat, people, loans, investments }, j = canon(m);
       if (j !== cloud.metaStr) { cloud.metaStr = j; cloud.pending = true; cloud.api.setMeta({ ...JSON.parse(JSON.stringify(m)), lastBackup: +load('finance_last_backup_ts', 0), updatedAt: Date.now() }).catch(cloudErr); }
     }
   } catch (e) { cloudErr(e); }
@@ -1352,8 +1706,8 @@ function cloudOnEntries(list, fromCache, pending) {
   }
   touch(fromCache, pending);
 }
-function metaDefaults(d) { return { categories: Array.isArray(d.categories) ? d.categories : [], tags: Array.isArray(d.tags) ? d.tags : [], budgets: d.budgets && typeof d.budgets === 'object' && !Array.isArray(d.budgets) ? d.budgets : {}, zakat: normZ(d.zakat), people: Array.isArray(d.people) ? d.people : [], loans: Array.isArray(d.loans) ? d.loans : [] }; }
-function saveMetaLocal() { save('finance_categories', categories); save('finance_tags', tags); save('finance_budgets', budgets); save('finance_zakat', zakat); save('finance_people', people); save('finance_loans', loans); }
+function metaDefaults(d) { return { categories: Array.isArray(d.categories) ? d.categories : [], tags: Array.isArray(d.tags) ? d.tags : [], budgets: d.budgets && typeof d.budgets === 'object' && !Array.isArray(d.budgets) ? d.budgets : {}, zakat: normZ(d.zakat), people: Array.isArray(d.people) ? d.people : [], loans: Array.isArray(d.loans) ? d.loans : [], investments: d.investments || investments }; }
+function saveMetaLocal() { save('finance_categories', categories); save('finance_tags', tags); save('finance_budgets', budgets); save('finance_zakat', zakat); save('finance_people', people); save('finance_loans', loans); save('finance_investments', investments); }
 function cloudOnMeta(d, fromCache, pending) {
   if (!cloud.mReady) {
     if (!d && fromCache) return setStatus();
@@ -1434,6 +1788,1636 @@ $('#fbOff').onclick = async () => {
 };
 
 $('#fbOpen').onclick = () => openSync();
+
+/* ==========================================================================
+   INVESTMENT PORTAL: ENGINE, CHARTS, DASHBOARD & CRUD
+   ========================================================================== */
+
+const SEED_INVESTMENTS = {
+  "version": 1,
+  "portfolios": {
+    "ktrades": {
+      "id": "ktrades",
+      "name": "KTrades",
+      "broker": "KTrade Securities",
+      "currentWorth": 8187220,
+      "worthUpdatedAt": "2026-11-14T00:00:00.000Z",
+      "worthHistory": [
+        {
+          "id": "w-kt-1",
+          "date": "2026-11-14T00:00:00.000Z",
+          "value": 8187220,
+          "note": "Margin Details - Total Worth from KTrade App"
+        }
+      ],
+      "investments": [
+        {
+          "id": "kt-inv-1",
+          "date": "2025-01-01",
+          "amount": 10000,
+          "type": "investment",
+          "note": "Initial Deposit"
+        },
+        {
+          "id": "kt-inv-2",
+          "date": "2025-01-28",
+          "amount": 10000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-3",
+          "date": "2025-02-13",
+          "amount": 200000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-4",
+          "date": "2025-03-12",
+          "amount": 200000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-5",
+          "date": "2025-05-08",
+          "amount": 43000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-6",
+          "date": "2025-06-12",
+          "amount": 250000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-7",
+          "date": "2025-06-12",
+          "amount": 249000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-8",
+          "date": "2025-06-19",
+          "amount": 250000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-9",
+          "date": "2025-06-19",
+          "amount": 249000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-10",
+          "date": "2025-08-05",
+          "amount": 250000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-11",
+          "date": "2025-08-18",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-12",
+          "date": "2025-08-26",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-13",
+          "date": "2025-08-27",
+          "amount": 250000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-14",
+          "date": "2025-08-29",
+          "amount": 350000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-15",
+          "date": "2025-09-09",
+          "amount": 250000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-16",
+          "date": "2025-09-10",
+          "amount": 249000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-17",
+          "date": "2025-09-10",
+          "amount": 250000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-18",
+          "date": "2025-09-11",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-19",
+          "date": "2025-09-22",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-20",
+          "date": "2025-09-23",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-21",
+          "date": "2025-09-30",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-22",
+          "date": "2025-10-01",
+          "amount": -60000,
+          "type": "withdrawal",
+          "note": "Withdrawal"
+        },
+        {
+          "id": "kt-inv-23",
+          "date": "2025-10-01",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-24",
+          "date": "2025-10-01",
+          "amount": 27577,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-25",
+          "date": "2025-10-15",
+          "amount": -413148,
+          "type": "withdrawal",
+          "note": "Withdrals"
+        },
+        {
+          "id": "kt-inv-26",
+          "date": "2025-12-29",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-27",
+          "date": "2026-07-08",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-28",
+          "date": "2026-07-15",
+          "amount": 100000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-29",
+          "date": "2026-08-25",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "kt-inv-30",
+          "date": "2026-09-01",
+          "amount": 800000,
+          "type": "adjustment",
+          "note": "Adjustment"
+        }
+      ],
+      "dividends": [
+        {
+          "id": "kt-div-1",
+          "date": "2025-02-01",
+          "symbol": "POL",
+          "amount": 85,
+          "note": ""
+        },
+        {
+          "id": "kt-div-2",
+          "date": "2025-03-24",
+          "symbol": "NPL",
+          "amount": 2775,
+          "note": ""
+        },
+        {
+          "id": "kt-div-3",
+          "date": "2025-04-18",
+          "symbol": "DCR",
+          "amount": 467,
+          "note": ""
+        },
+        {
+          "id": "kt-div-4",
+          "date": "2025-05-13",
+          "symbol": "MEBL",
+          "amount": 595,
+          "note": ""
+        },
+        {
+          "id": "kt-div-5",
+          "date": "2025-05-13",
+          "symbol": "EFERT",
+          "amount": 229,
+          "note": ""
+        },
+        {
+          "id": "kt-div-6",
+          "date": "2025-05-14",
+          "symbol": "FABL",
+          "amount": 765,
+          "note": ""
+        },
+        {
+          "id": "kt-div-7",
+          "date": "2025-05-16",
+          "symbol": "FFC",
+          "amount": 476,
+          "note": ""
+        },
+        {
+          "id": "kt-div-8",
+          "date": "2025-05-16",
+          "symbol": "NPL",
+          "amount": 3885,
+          "note": ""
+        },
+        {
+          "id": "kt-div-9",
+          "date": "2025-08-04",
+          "symbol": "DCR",
+          "amount": 6961,
+          "note": ""
+        },
+        {
+          "id": "kt-div-10",
+          "date": "2025-09-05",
+          "symbol": "MEBL",
+          "amount": 6545,
+          "note": ""
+        },
+        {
+          "id": "kt-div-11",
+          "date": "2025-09-19",
+          "symbol": "FABL",
+          "amount": 4794,
+          "note": ""
+        },
+        {
+          "id": "kt-div-12",
+          "date": "2025-10-30",
+          "symbol": "DCR",
+          "amount": 28381,
+          "note": ""
+        },
+        {
+          "id": "kt-div-13",
+          "date": "2025-11-03",
+          "symbol": "POL",
+          "amount": 169150,
+          "note": ""
+        },
+        {
+          "id": "kt-div-14",
+          "date": "2025-11-06",
+          "symbol": "KAPCO",
+          "amount": 28632,
+          "note": ""
+        },
+        {
+          "id": "kt-div-15",
+          "date": "2025-11-06",
+          "symbol": "MCBIM",
+          "amount": 1487,
+          "note": ""
+        },
+        {
+          "id": "kt-div-16",
+          "date": "2025-11-13",
+          "symbol": "MEBL",
+          "amount": 11602,
+          "note": ""
+        },
+        {
+          "id": "kt-div-17",
+          "date": "2025-11-13",
+          "symbol": "FABL",
+          "amount": 5291,
+          "note": ""
+        },
+        {
+          "id": "kt-div-18",
+          "date": "2025-11-13",
+          "symbol": "FFC",
+          "amount": 4441,
+          "note": ""
+        },
+        {
+          "id": "kt-div-19",
+          "date": "2026-01-08",
+          "symbol": "DCR",
+          "amount": 28381,
+          "note": ""
+        },
+        {
+          "id": "kt-div-20",
+          "date": "2026-03-17",
+          "symbol": "INDU",
+          "amount": 5474,
+          "note": ""
+        },
+        {
+          "id": "kt-div-21",
+          "date": "2026-03-18",
+          "symbol": "POL",
+          "amount": 70499,
+          "note": ""
+        },
+        {
+          "id": "kt-div-22",
+          "date": "2026-03-25",
+          "symbol": "FFC",
+          "amount": 3973,
+          "note": ""
+        },
+        {
+          "id": "kt-div-23",
+          "date": "2026-03-27",
+          "symbol": "MEBL",
+          "amount": 11602,
+          "note": ""
+        },
+        {
+          "id": "kt-div-24",
+          "date": "2026-04-01",
+          "symbol": "EFERT",
+          "amount": 1530,
+          "note": ""
+        },
+        {
+          "id": "kt-div-25",
+          "date": "2026-04-03",
+          "symbol": "FABL",
+          "amount": 7055,
+          "note": ""
+        },
+        {
+          "id": "kt-div-26",
+          "date": "2026-04-21",
+          "symbol": "DCR",
+          "amount": 29733,
+          "note": ""
+        },
+        {
+          "id": "kt-div-27",
+          "date": "2026-05-18",
+          "symbol": "HUBC",
+          "amount": 6375,
+          "note": ""
+        },
+        {
+          "id": "kt-div-28",
+          "date": "2026-05-19",
+          "symbol": "INDU",
+          "amount": 21675,
+          "note": ""
+        },
+        {
+          "id": "kt-div-29",
+          "date": "2026-05-20",
+          "symbol": "FFC",
+          "amount": 15534,
+          "note": ""
+        },
+        {
+          "id": "kt-div-30",
+          "date": "2026-08-05",
+          "symbol": "DCR",
+          "amount": 29733,
+          "note": ""
+        },
+        {
+          "id": "kt-div-31",
+          "date": "2026-08-19",
+          "symbol": "FFC",
+          "amount": 26499,
+          "note": ""
+        },
+        {
+          "id": "kt-div-32",
+          "date": "2026-08-28",
+          "symbol": "MEBL",
+          "amount": 14280,
+          "note": ""
+        },
+        {
+          "id": "kt-div-33",
+          "date": "2026-10-01",
+          "symbol": "INDU",
+          "amount": 19975,
+          "note": ""
+        },
+        {
+          "id": "kt-div-34",
+          "date": "2026-10-27",
+          "symbol": "HUBC",
+          "amount": 17000,
+          "note": ""
+        },
+        {
+          "id": "kt-div-35",
+          "date": "2026-10-28",
+          "symbol": "POL",
+          "amount": 184875,
+          "note": ""
+        },
+        {
+          "id": "kt-div-36",
+          "date": "2026-10-29",
+          "symbol": "DCR",
+          "amount": 29733,
+          "note": ""
+        },
+        {
+          "id": "kt-div-37",
+          "date": "2026-10-31",
+          "symbol": "MEBL",
+          "amount": 14625,
+          "note": "Dividend reconciliation"
+        }
+      ]
+    },
+    "akd": {
+      "id": "akd",
+      "name": "AKD",
+      "broker": "AKD Securities",
+      "currentWorth": 3501177,
+      "worthUpdatedAt": "2026-11-14T00:00:00.000Z",
+      "worthHistory": [
+        {
+          "id": "w-akd-1",
+          "date": "2026-11-14T00:00:00.000Z",
+          "value": 3501177,
+          "note": "Margin Details - Equity from AKD App"
+        }
+      ],
+      "investments": [
+        {
+          "id": "akd-inv-1",
+          "date": "2025-08-08",
+          "amount": 10000,
+          "type": "investment",
+          "note": "Initial Deposit"
+        },
+        {
+          "id": "akd-inv-2",
+          "date": "2025-08-11",
+          "amount": 400000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-3",
+          "date": "2025-08-12",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-4",
+          "date": "2025-08-13",
+          "amount": 90000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-5",
+          "date": "2025-08-26",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-6",
+          "date": "2025-08-27",
+          "amount": 400000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-7",
+          "date": "2025-10-08",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-8",
+          "date": "2025-12-26",
+          "amount": 500000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-9",
+          "date": "2025-12-26",
+          "amount": 100000,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-10",
+          "date": "2025-12-26",
+          "amount": 74846,
+          "type": "investment",
+          "note": "Deposit"
+        },
+        {
+          "id": "akd-inv-11",
+          "date": "2026-01-01",
+          "amount": 189000,
+          "type": "adjustment",
+          "note": "Adjustment"
+        }
+      ],
+      "dividends": [
+        {
+          "id": "akd-div-1",
+          "date": "2025-10-30",
+          "symbol": "DCR",
+          "amount": 19278,
+          "note": ""
+        },
+        {
+          "id": "akd-div-2",
+          "date": "2025-11-03",
+          "symbol": "POL",
+          "amount": 52062,
+          "note": ""
+        },
+        {
+          "id": "akd-div-3",
+          "date": "2025-11-13",
+          "symbol": "MEBL",
+          "amount": 1487,
+          "note": ""
+        },
+        {
+          "id": "akd-div-4",
+          "date": "2025-11-13",
+          "symbol": "FFC",
+          "amount": 2019,
+          "note": ""
+        },
+        {
+          "id": "akd-div-5",
+          "date": "2026-01-08",
+          "symbol": "DCR",
+          "amount": 19278,
+          "note": ""
+        },
+        {
+          "id": "akd-div-6",
+          "date": "2026-03-12",
+          "symbol": "PPL",
+          "amount": 2125,
+          "note": ""
+        },
+        {
+          "id": "akd-div-7",
+          "date": "2026-03-18",
+          "symbol": "POL",
+          "amount": 20454,
+          "note": ""
+        },
+        {
+          "id": "akd-div-8",
+          "date": "2026-03-25",
+          "symbol": "FFC",
+          "amount": 1806,
+          "note": ""
+        },
+        {
+          "id": "akd-div-9",
+          "date": "2026-03-27",
+          "symbol": "MEBL",
+          "amount": 1487,
+          "note": ""
+        },
+        {
+          "id": "akd-div-10",
+          "date": "2026-04-21",
+          "symbol": "DCR",
+          "amount": 20196,
+          "note": ""
+        },
+        {
+          "id": "akd-div-11",
+          "date": "2026-05-18",
+          "symbol": "HUBC",
+          "amount": 4250,
+          "note": ""
+        },
+        {
+          "id": "akd-div-12",
+          "date": "2026-05-19",
+          "symbol": "INDU",
+          "amount": 8670,
+          "note": ""
+        },
+        {
+          "id": "akd-div-13",
+          "date": "2026-05-20",
+          "symbol": "FFC",
+          "amount": 9031,
+          "note": ""
+        },
+        {
+          "id": "akd-div-14",
+          "date": "2026-08-05",
+          "symbol": "DCR",
+          "amount": 15708,
+          "note": ""
+        },
+        {
+          "id": "akd-div-15",
+          "date": "2026-08-19",
+          "symbol": "FFC",
+          "amount": 15406,
+          "note": ""
+        },
+        {
+          "id": "akd-div-16",
+          "date": "2026-08-28",
+          "symbol": "MEBL",
+          "amount": 1700,
+          "note": ""
+        },
+        {
+          "id": "akd-div-17",
+          "date": "2026-10-02",
+          "symbol": "INDU",
+          "amount": 7900,
+          "note": ""
+        },
+        {
+          "id": "akd-div-18",
+          "date": "2026-10-28",
+          "symbol": "POL",
+          "amount": 80112,
+          "note": ""
+        },
+        {
+          "id": "akd-div-19",
+          "date": "2026-10-29",
+          "symbol": "DCR",
+          "amount": 15708,
+          "note": ""
+        },
+        {
+          "id": "akd-div-20",
+          "date": "2026-10-31",
+          "symbol": "FFC",
+          "amount": 1812,
+          "note": "Dividend reconciliation"
+        }
+      ]
+    }
+  }
+};
+
+function getDefaultInvestments() {
+  return JSON.parse(JSON.stringify(SEED_INVESTMENTS));
+}
+
+let investments = load('finance_investments', null);
+if (!investments || !investments.portfolios || !investments.portfolios.ktrades || !investments.portfolios.akd) {
+  investments = getDefaultInvestments();
+  save('finance_investments', investments);
+}
+
+let activePort = 'all'; // 'all' | 'ktrades' | 'akd'
+let invViewSplit = 'split'; // 'split' | 'inv' | 'div'
+let invSearchQuery = '';
+let divSearchQuery = '';
+let divFilterSymbol = '';
+let activeMainTab = load('finance_main_tab', 'budget');
+let editingInv = null;
+let editingDiv = null;
+
+// Helper to query all matching elements
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+// Popular PSX Stock Tickers & colors
+const TICKER_COLORS = {
+  'POL': '#059669',
+  'MEBL': '#0d9488',
+  'FFC': '#16a34a',
+  'DCR': '#7c3aed',
+  'INDU': '#2563eb',
+  'HUBC': '#d97706',
+  'EFERT': '#0891b2',
+  'FABL': '#c026d3',
+  'PPL': '#e11d48',
+  'KAPCO': '#ea580c',
+  'MCBIM': '#9333ea',
+  'NPL': '#475569'
+};
+
+const POPULAR_TICKERS = ['POL', 'MEBL', 'FFC', 'DCR', 'INDU', 'HUBC', 'EFERT', 'FABL', 'PPL', 'KAPCO', 'MCBIM', 'NPL'];
+
+function getTickerColor(sym) {
+  sym = (sym || '').toUpperCase().trim();
+  if (TICKER_COLORS[sym]) return TICKER_COLORS[sym];
+  let h = 0;
+  for (let i = 0; i < sym.length; i++) h = (h * 31 + sym.charCodeAt(i)) >>> 0;
+  return PAL[h % PAL.length];
+}
+
+// Initialize Canvas hit listeners for investment charts
+['ci1', 'ci2', 'ci3'].forEach(id => {
+  const cv = $('#' + id);
+  if (!cv) return;
+  const mv = e => {
+    const r = cv.getBoundingClientRect(), t = cv._hit && cv._hit(e.clientX - r.left, e.clientY - r.top);
+    if (!t) { tip.style.display = 'none'; return; }
+    tip.textContent = t; tip.style.display = 'block';
+    tip.style.left = Math.max(8, Math.min(innerWidth - tip.offsetWidth - 8, e.clientX + 12)) + 'px';
+    tip.style.top = (e.clientY - 40 < 8 ? e.clientY + 16 : e.clientY - 40) + 'px';
+  };
+  cv.addEventListener('pointermove', mv);
+  cv.addEventListener('pointerdown', mv);
+  cv.addEventListener('pointerleave', () => tip.style.display = 'none');
+  const eEl = $('#e' + id.slice(1));
+  if (eEl) eEl.innerHTML = '<div style="font-size:2rem">📭</div><div>No data for this view</div>';
+});
+
+// Calculations helper
+function calcPortfolioMetrics(pId) {
+  const ports = investments.portfolios;
+  const list = pId === 'all' ? [ports.ktrades, ports.akd].filter(Boolean) : [ports[pId]].filter(Boolean);
+  
+  let netInv = 0;
+  let totDivs = 0;
+  let curWorth = 0;
+  let invCount = 0;
+  let divCount = 0;
+
+  list.forEach(p => {
+    curWorth += Number(p.currentWorth) || 0;
+    (p.investments || []).forEach(iv => {
+      invCount++;
+      const amt = Number(iv.amount) || 0;
+      netInv += amt;
+    });
+    (p.dividends || []).forEach(dv => {
+      divCount++;
+      totDivs += Number(dv.amount) || 0;
+    });
+  });
+
+  const capGain = curWorth - netInv;
+  const capGainPct = netInv > 0 ? (capGain / netInv) * 100 : 0;
+  const divYieldPct = netInv > 0 ? (totDivs / netInv) * 100 : 0;
+  const totProfit = totDivs + capGain;
+  const totReturnPct = netInv > 0 ? (totProfit / netInv) * 100 : 0;
+
+  return {
+    netInvestment: netInv,
+    totalDividends: totDivs,
+    currentWorth: curWorth,
+    capitalGain: capGain,
+    capitalGainPct: capGainPct,
+    divYieldPct: divYieldPct,
+    totalProfit: totProfit,
+    totalReturnPct: totReturnPct,
+    invCount,
+    divCount
+  };
+}
+
+// Switch between Main Tabs: Budget vs Investment
+function switchMainTab(tab) {
+  activeMainTab = tab;
+  try { localStorage.setItem('finance_main_tab', tab); } catch (e) {}
+  
+  const isB = tab === 'budget';
+  $('#budgetView').classList.toggle('hidden', !isB);
+  $('#investView').classList.toggle('hidden', isB);
+
+  $('#navBudgetBtn').classList.toggle('active', isB);
+  $('#navBudgetBtn').setAttribute('aria-selected', isB ? 'true' : 'false');
+  $('#navInvestBtn').classList.toggle('active', !isB);
+  $('#navInvestBtn').setAttribute('aria-selected', !isB ? 'true' : 'false');
+
+  if (isB) {
+    $('#hdrMetricLbl').textContent = 'This month';
+    renderTop();
+    $('#newBtnD').classList.remove('hidden');
+    $('#newInvestBtnD').classList.add('hidden');
+    $('#fab').onclick = () => openModal();
+    renderCharts();
+  } else {
+    const m = calcPortfolioMetrics('all');
+    $('#hdrMetricLbl').textContent = 'Total Worth';
+    const nb = $('#netBal');
+    nb.textContent = fmt(m.currentWorth);
+    nb.className = 'text-sm font-semibold text-emerald-600 dark:text-emerald-400';
+    $('#newBtnD').classList.add('hidden');
+    $('#newInvestBtnD').classList.remove('hidden');
+    $('#newInvestBtnD').onclick = () => openInvestModal();
+    $('#fab').onclick = () => openInvestModal();
+    renderInvestments();
+  }
+}
+
+$('#navBudgetBtn').onclick = () => switchMainTab('budget');
+$('#navInvestBtn').onclick = () => switchMainTab('investment');
+
+// Portfolio Sub-tabs selector
+function selectPortfolio(pId) {
+  activePort = pId;
+  $$('[data-port]').forEach(btn => {
+    const on = btn.dataset.port === pId;
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  divFilterSymbol = '';
+  $('#divSymbolFilter').value = '';
+  renderInvestments();
+}
+
+$$('[data-port]').forEach(btn => {
+  btn.onclick = () => selectPortfolio(btn.dataset.port);
+});
+
+// Render all investment elements
+function renderInvestments() {
+  if ($('#investView').classList.contains('hidden') && activeMainTab !== 'investment') return;
+
+  const m = calcPortfolioMetrics(activePort);
+  const ports = investments.portfolios;
+
+  // Banner status
+  const pName = activePort === 'all' ? 'Consolidated Portfolios' : (ports[activePort] ? ports[activePort].name : activePort);
+  const pBroker = activePort === 'all' ? 'All Accounts' : (ports[activePort] ? ports[activePort].broker : '');
+  $('#portBadge').textContent = pBroker;
+  $('#portSubtitle').textContent = activePort === 'all' ? 'Consolidated KTrades & AKD Portfolios' : `${pName} Investment Account`;
+  
+  const eqValEl = $('#equityValLabel');
+  eqValEl.textContent = fmt(m.currentWorth);
+  eqValEl.className = 'font-semibold ' + (m.capitalGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400');
+
+  // Header balance if on investment tab
+  if (activeMainTab === 'investment') {
+    const nb = $('#netBal');
+    nb.textContent = fmt(calcPortfolioMetrics('all').currentWorth);
+    nb.className = 'text-sm font-semibold text-emerald-600 dark:text-emerald-400';
+  }
+
+  // 1. KPI Cards
+  const capSign = m.capitalGain >= 0 ? '+' : '';
+  const capColor = m.capitalGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400';
+  const capPillBg = m.capitalGain >= 0 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300';
+
+  const kpisHtml = `
+    <!-- Card 1: Total Investment -->
+    <div class="card !p-3 sm:!p-4">
+      <div class="flex justify-between text-xs text-slate-500">
+        <span class="font-medium uppercase tracking-wider text-[11px]">Total Investment</span>
+        <span>💵</span>
+      </div>
+      <div class="mt-2 text-base sm:text-xl font-bold break-words">${fmt(m.netInvestment)}</div>
+      <div class="mt-1.5 text-[11px] text-slate-400">${m.invCount} transactions net</div>
+    </div>
+
+    <!-- Card 2: Current Equity Worth (from broker app) -->
+    <div class="card !p-3 sm:!p-4 border-emerald-500/40 relative">
+      <div class="flex justify-between text-xs text-slate-500">
+        <span class="font-medium uppercase tracking-wider text-[11px]">Margin Details - Equity</span>
+        <button type="button" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline" onclick="openWorthModal('${activePort === 'all' ? 'ktrades' : activePort}')" title="Edit from broker app">✏️</button>
+      </div>
+      <div class="mt-2 text-base sm:text-xl font-bold text-rose-600 dark:text-rose-400 break-words">${fmt(m.currentWorth)}</div>
+      <div class="mt-1.5 text-[11px] text-slate-400">Input from broker app</div>
+    </div>
+
+    <!-- Card 3: Total Dividends Credited -->
+    <div class="card !p-3 sm:!p-4">
+      <div class="flex justify-between text-xs text-slate-500">
+        <span class="font-medium uppercase tracking-wider text-[11px]">Dividends Credited</span>
+        <span>🎁</span>
+      </div>
+      <div class="mt-2 text-base sm:text-xl font-bold text-emerald-600 dark:text-emerald-400 break-words">${fmt(m.totalDividends)}</div>
+      <div class="mt-1.5 flex items-center gap-1.5">
+        <span class="pill bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 font-semibold text-[10px]">${m.divYieldPct.toFixed(2)}%</span>
+        <span class="text-[11px] text-slate-400">Div on Inv</span>
+      </div>
+    </div>
+
+    <!-- Card 4: Capital Gain / Loss -->
+    <div class="card !p-3 sm:!p-4">
+      <div class="flex justify-between text-xs text-slate-500">
+        <span class="font-medium uppercase tracking-wider text-[11px]">Capital Inc / Loss</span>
+        <span>${m.capitalGain >= 0 ? '📈' : '📉'}</span>
+      </div>
+      <div class="mt-2 text-base sm:text-xl font-bold ${capColor} break-words">${capSign}${fmt(m.capitalGain)}</div>
+      <div class="mt-1.5 flex items-center gap-1.5">
+        <span class="pill ${capPillBg} font-semibold text-[10px]">${capSign}${m.capitalGainPct.toFixed(2)}%</span>
+        <span class="text-[11px] text-slate-400">Gain on Inv</span>
+      </div>
+    </div>
+
+    <!-- Card 5: Total Profit on Investment (Yellow highlight matching Excel) -->
+    <div class="card !p-3 sm:!p-4 kpi-profit-card col-span-2 lg:col-span-1 shadow-sm">
+      <div class="flex justify-between text-xs">
+        <span class="font-bold uppercase tracking-wider text-[11px]">Total Profit on Inv</span>
+        <span>⭐</span>
+      </div>
+      <div class="mt-2 text-lg sm:text-xl font-extrabold break-words">${m.totalProfit >= 0 ? '+' : ''}${fmt(m.totalProfit)}</div>
+      <div class="mt-1.5 flex items-center gap-1.5">
+        <span class="pill bg-amber-200 text-amber-900 dark:bg-amber-800 dark:text-amber-100 font-bold text-[10px]">${m.totalReturnPct.toFixed(2)}%</span>
+        <span class="text-[11px] font-semibold opacity-90">Total Return</span>
+      </div>
+    </div>
+  `;
+  $('#investKpis').innerHTML = kpisHtml;
+
+  // 2. Render Charts
+  renderInvestmentCharts();
+
+  // 3. Render Tables
+  renderInvestmentTables();
+}
+
+// Render the 3 Investment Canvas Charts
+function renderInvestmentCharts() {
+  if ($('#investView').classList.contains('hidden')) return;
+
+  const ports = investments.portfolios;
+  const pList = activePort === 'all' ? [ports.ktrades, ports.akd].filter(Boolean) : [ports[activePort]].filter(Boolean);
+
+  // --- Chart 1: Dividends by Stock Donut ---
+  const divByStock = {};
+  let totDivs = 0;
+  pList.forEach(p => {
+    (p.dividends || []).forEach(d => {
+      const sym = (d.symbol || 'OTHER').toUpperCase().trim();
+      const amt = Number(d.amount) || 0;
+      divByStock[sym] = (divByStock[sym] || 0) + amt;
+      totDivs += amt;
+    });
+  });
+
+  const sortedStocks = Object.keys(divByStock).sort((a, b) => divByStock[b] - divByStock[a]);
+  const hasDivs = sortedStocks.length > 0 && totDivs > 0;
+  show('ci1', hasDivs);
+  $('#ci1Subtitle').textContent = sortedStocks.length + ' stocks';
+
+  if (hasDivs) {
+    const stockColors = sortedStocks.map(getTickerColor);
+    const stockVals = sortedStocks.map(s => divByStock[s]);
+    donut('ci1', sortedStocks, stockVals, stockColors);
+    legend('ci1', sortedStocks.map((s, i) => ({
+      label: `${s}: ${fmt(stockVals[i])} (${((stockVals[i] / totDivs) * 100).toFixed(1)}%)`,
+      color: stockColors[i]
+    })));
+  }
+
+  // --- Chart 2: Capital vs Market Equity vs Total Value Bar Chart ---
+  const m = calcPortfolioMetrics(activePort);
+  show('ci2', true);
+  const labels2 = ['Net Capital', 'Market Equity', 'Total Value'];
+  const full2 = ['Net Capital Invested', 'Current Market Equity', 'Total Worth + Dividends'];
+  const data2 = [m.netInvestment, m.currentWorth, m.currentWorth + m.totalDividends];
+  const colors2 = ['#64748b', '#0ea5e9', '#10b981'];
+  
+  const c2 = prep('ci2', 200);
+  const ymax2 = Math.max(...data2, 1000);
+  const g2 = frame(c2, ymax2, labels2, '', 'PKR', 1, false);
+  const hits2 = [];
+  data2.forEach((v, i) => {
+    const bw = Math.min(42, g2.slot * 0.55);
+    const bx = g2.L + g2.slot * i + (g2.slot - bw) / 2;
+    const by = g2.Y(v);
+    const bh = g2.B - by;
+    c2.x.fillStyle = colors2[i];
+    if (c2.x.roundRect) {
+      c2.x.beginPath(); c2.x.roundRect(bx, by, bw, bh, [4, 4, 0, 0]); c2.x.fill();
+    } else {
+      c2.x.fillRect(bx, by, bw, bh);
+    }
+    hits2.push([bx, by, bw, bh, `${full2[i]}: ${fmt(v)}`]);
+  });
+  c2.cv._hit = (px, py) => {
+    const h = hits2.find(r => px >= r[0] && px <= r[0] + r[2] && py >= r[1] - 4 && py <= r[1] + r[3]);
+    return h && h[4];
+  };
+  legend('ci2', [
+    { label: 'Net Invested: ' + fmt(m.netInvestment), color: '#64748b' },
+    { label: 'Market Equity: ' + fmt(m.currentWorth), color: '#0ea5e9' },
+    { label: 'Total Profit: ' + fmt(m.totalProfit), color: '#10b981' }
+  ]);
+
+  // --- Chart 3: Monthly Dividend Timeline ---
+  const monthlyDivs = {};
+  pList.forEach(p => {
+    (p.dividends || []).forEach(d => {
+      const ym = (d.date || '').slice(0, 7);
+      if (ym) {
+        monthlyDivs[ym] = (monthlyDivs[ym] || 0) + (Number(d.amount) || 0);
+      }
+    });
+  });
+
+  const mKeys = Object.keys(monthlyDivs).sort();
+  const hasM = mKeys.length > 0;
+  show('ci3', hasM);
+  if (hasM) {
+    const shortM = mKeys.map(k => {
+      const [y, mm] = k.split('-');
+      return new Date(+y, +mm - 1, 1).toLocaleString('en-US', { month: 'short' }) + " '" + y.slice(2);
+    });
+    const fullM = mKeys.map(mlabel);
+    const dataM = mKeys.map(k => monthlyDivs[k]);
+    bars('ci3', shortM, fullM, [{ label: 'Dividends', color: '#10b981', data: dataM }], 'Month', 'PKR');
+    legend('ci3', [{ label: 'Monthly Dividend Inflow', color: '#10b981' }]);
+  }
+}
+
+// Render the Investment and Dividend Data Tables
+function renderInvestmentTables() {
+  const ports = investments.portfolios;
+  const pList = activePort === 'all' ? [ports.ktrades, ports.akd].filter(Boolean) : [ports[activePort]].filter(Boolean);
+
+  // 1. Gather Investments
+  let allInvs = [];
+  pList.forEach(p => {
+    (p.investments || []).forEach(iv => {
+      allInvs.push({ ...iv, portId: p.id, portName: p.name });
+    });
+  });
+
+  // Sort by date descending
+  allInvs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+  // Search filter
+  if (invSearchQuery) {
+    const q = invSearchQuery.toLowerCase();
+    allInvs = allInvs.filter(x => (x.note || '').toLowerCase().includes(q) || (x.date || '').includes(q) || String(x.amount).includes(q) || (x.type || '').includes(q));
+  }
+
+  $('#invCountBadge').textContent = allInvs.length + ' entries';
+
+  let totalInvSum = 0;
+  const invRows = allInvs.map(iv => {
+    const amt = Number(iv.amount) || 0;
+    totalInvSum += amt;
+    const isW = iv.type === 'withdrawal' || amt < 0;
+    const isAdj = iv.type === 'adjustment';
+    const typeLabel = isAdj ? 'Adjustment' : isW ? 'Withdrawal' : 'Deposit';
+    const typeBadge = isAdj ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' : isW ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300';
+    const amtColor = isW ? 'text-rose-600 dark:text-rose-400' : 'text-slate-800 dark:text-slate-200';
+    const amtSign = amt > 0 ? '+' : '';
+
+    return `
+      <tr>
+        <td class="whitespace-nowrap font-medium text-slate-500">${fdateShort(iv.date)}</td>
+        <td>
+          <span class="pill ${typeBadge}">${typeLabel}</span>
+          ${activePort === 'all' ? `<span class="pill bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-500 ml-1">${esc(iv.portName)}</span>` : ''}
+        </td>
+        <td class="text-right font-semibold whitespace-nowrap ${amtColor}">${amtSign}${fmt(amt)}</td>
+        <td class="text-slate-500 max-w-[140px] truncate" title="${esc(iv.note || '')}">${esc(iv.note || '—')}</td>
+        <td class="text-right whitespace-nowrap">
+          <button type="button" class="mini" onclick="editInv('${iv.portId}', '${iv.id}')">Edit</button>
+          <button type="button" class="mini danger" onclick="deleteInv('${iv.portId}', '${iv.id}')">✕</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  $('#invTableBody').innerHTML = invRows || '<tr><td colspan="5" class="text-center py-6 text-slate-400">No investment records found</td></tr>';
+  $('#invTableFoot').innerHTML = `
+    <tr>
+      <th colspan="2">Total Net Investment</th>
+      <th class="text-right text-emerald-600 dark:text-emerald-400 font-bold">${fmt(totalInvSum)}</th>
+      <th colspan="2"></th>
+    </tr>
+  `;
+
+  // 2. Gather Dividends
+  let allDivs = [];
+  const symbolSet = new Set();
+  pList.forEach(p => {
+    (p.dividends || []).forEach(dv => {
+      const sym = (dv.symbol || '').toUpperCase().trim();
+      if (sym) symbolSet.add(sym);
+      allDivs.push({ ...dv, portId: p.id, portName: p.name });
+    });
+  });
+
+  // Update symbols dropdown filter
+  const curSymbolFilter = $('#divSymbolFilter').value;
+  const symbolOpts = ['<option value="">All Stocks</option>'].concat([...symbolSet].sort().map(s => `<option value="${s}" ${s === divFilterSymbol ? 'selected' : ''}>${s}</option>`));
+  $('#divSymbolFilter').innerHTML = symbolOpts.join('');
+
+  // Sort by date descending
+  allDivs.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+  // Filters
+  if (divFilterSymbol) {
+    allDivs = allDivs.filter(d => (d.symbol || '').toUpperCase().trim() === divFilterSymbol);
+  }
+  if (divSearchQuery) {
+    const q = divSearchQuery.toLowerCase();
+    allDivs = allDivs.filter(d => (d.symbol || '').toLowerCase().includes(q) || (d.note || '').toLowerCase().includes(q) || (d.date || '').includes(q) || String(d.amount).includes(q));
+  }
+
+  $('#divCountBadge').textContent = allDivs.length + ' entries';
+
+  let totalDivSum = 0;
+  const divRows = allDivs.map(dv => {
+    const amt = Number(dv.amount) || 0;
+    totalDivSum += amt;
+    const sym = (dv.symbol || 'SHARE').toUpperCase().trim();
+    const symColor = getTickerColor(sym);
+
+    return `
+      <tr>
+        <td class="whitespace-nowrap font-medium text-slate-500">${fdateShort(dv.date)}</td>
+        <td>
+          <span class="ticker-badge text-white" style="background:${symColor}">${esc(sym)}</span>
+          ${activePort === 'all' ? `<span class="pill bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-500 ml-1">${esc(dv.portName)}</span>` : ''}
+        </td>
+        <td class="text-right font-semibold whitespace-nowrap text-emerald-600 dark:text-emerald-400">+${fmt(amt)}</td>
+        <td class="text-slate-500 max-w-[140px] truncate" title="${esc(dv.note || '')}">${esc(dv.note || '—')}</td>
+        <td class="text-right whitespace-nowrap">
+          <button type="button" class="mini" onclick="editDiv('${dv.portId}', '${dv.id}')">Edit</button>
+          <button type="button" class="mini danger" onclick="deleteDiv('${dv.portId}', '${dv.id}')">✕</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  $('#divTableBody').innerHTML = divRows || '<tr><td colspan="5" class="text-center py-6 text-slate-400">No dividend records found</td></tr>';
+  const yieldOnThis = totalInvSum > 0 ? ` (${((totalDivSum / totalInvSum) * 100).toFixed(2)}% yield)` : '';
+  $('#divTableFoot').innerHTML = `
+    <tr>
+      <th colspan="2">Total Dividends Credited</th>
+      <th class="text-right text-emerald-600 dark:text-emerald-400 font-bold">${fmt(totalDivSum)}</th>
+      <th colspan="2" class="text-xs font-normal text-slate-400">${yieldOnThis}</th>
+    </tr>
+  `;
+}
+
+const fdateShort = dStr => {
+  if (!dStr) return '—';
+  const d = new Date(dStr);
+  if (isNaN(d)) return dStr;
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+// Table search and filters
+$('#invSearch').oninput = e => {
+  invSearchQuery = e.target.value.trim();
+  renderInvestmentTables();
+};
+
+$('#divSearch').oninput = e => {
+  divSearchQuery = e.target.value.trim();
+  renderInvestmentTables();
+};
+
+$('#divSymbolFilter').onchange = e => {
+  divFilterSymbol = e.target.value;
+  renderInvestmentTables();
+};
+
+// Side-by-side vs Tab toggler
+function setTableViewMode(mode) {
+  invViewSplit = mode;
+  $('#btnViewSplit').classList.toggle('active', mode === 'split');
+  $('#btnViewInvs').classList.toggle('active', mode === 'inv');
+  $('#btnViewDivs').classList.toggle('active', mode === 'div');
+
+  const invCol = $('#invCol');
+  const divCol = $('#divCol');
+  const splitGrid = $('#splitGrid');
+
+  if (mode === 'split') {
+    splitGrid.className = 'grid lg:grid-cols-2 gap-5';
+    invCol.classList.remove('hidden');
+    divCol.classList.remove('hidden');
+  } else if (mode === 'inv') {
+    splitGrid.className = 'block';
+    invCol.classList.remove('hidden');
+    divCol.classList.add('hidden');
+  } else {
+    splitGrid.className = 'block';
+    invCol.classList.add('hidden');
+    divCol.classList.remove('hidden');
+  }
+}
+
+$('#btnViewSplit').onclick = () => setTableViewMode('split');
+$('#btnViewInvs').onclick = () => setTableViewMode('inv');
+$('#btnViewDivs').onclick = () => setTableViewMode('div');
+
+// Context Menu (Export & Reload)
+$('#btnInvestMore').onclick = e => {
+  e.stopPropagation();
+  $('#investMenu').classList.toggle('hidden');
+};
+document.addEventListener('click', e => {
+  if (!e.target.closest('#investMenuWrap')) $('#investMenu').classList.add('hidden');
+});
+
+// Export to CSV
+$('#btnExportInvCsv').onclick = () => {
+  $('#investMenu').classList.add('hidden');
+  const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const rows = [['Portfolio', 'Record Type', 'Date', 'Symbol', 'Type', 'Amount (PKR)', 'Note']];
+  
+  Object.values(investments.portfolios).forEach(p => {
+    (p.investments || []).forEach(iv => {
+      rows.push([p.name, 'Capital Flow', iv.date, '', iv.type || 'investment', iv.amount, iv.note || '']);
+    });
+    (p.dividends || []).forEach(dv => {
+      rows.push([p.name, 'Dividend', dv.date, dv.symbol, 'dividend', dv.amount, dv.note || '']);
+    });
+  });
+
+  download(`budget-os-investments-${stamp()}.csv`, '\uFEFF' + rows.map(r => r.map(q).join(',')).join('\r\n'), 'text/csv;charset=utf-8');
+  toast('Investment CSV exported');
+};
+
+// Export to JSON
+$('#btnExportInvJson').onclick = () => {
+  $('#investMenu').classList.add('hidden');
+  download(`budget-os-investments-${stamp()}.json`, JSON.stringify(investments, null, 2), 'application/json');
+  toast('Investment JSON exported');
+};
+
+// Reset to Excel Data
+$('#btnReloadExcel').onclick = async () => {
+  $('#investMenu').classList.add('hidden');
+  if (!(await confirmYes('Reset to Original Excel Records?', 'This will reload all historical KTrades and AKD investments and dividends from your original spreadsheet.', 'Reset Data'))) return;
+  investments = getDefaultInvestments();
+  persist();
+  renderInvestments();
+  toast('Excel records restored!');
+};
+
+// Quick buttons linking to modals
+$('#btnAddInv').onclick = $('#btnQuickAddInv').onclick = () => openInvestModal();
+$('#btnAddDiv').onclick = $('#btnQuickAddDiv').onclick = () => openDividendModal();
+$('#btnUpdateWorth').onclick = $('#btnInlineEditWorth').onclick = () => openWorthModal(activePort === 'all' ? 'ktrades' : activePort);
+
+/* ==========================================================================
+   MODAL 1: ADD / EDIT INVESTMENT (Capital Inflow / Outflow)
+   ========================================================================== */
+let invCurrentType = 'investment';
+
+function openInvestModal(portId, recId) {
+  editingInv = recId ? { portId, id: recId } : null;
+  const pId = portId || (activePort === 'all' ? 'ktrades' : activePort);
+  $('#invPort').value = pId;
+
+  if (editingInv) {
+    const port = investments.portfolios[portId];
+    const rec = (port.investments || []).find(x => x.id === recId);
+    if (!rec) return;
+    $('#invModalTitle').textContent = 'Edit Investment Record';
+    $('#invAmt').value = Math.abs(rec.amount);
+    $('#invDate').value = rec.date ? rec.date.slice(0, 10) : '';
+    $('#invNote').value = rec.note || '';
+    invCurrentType = rec.type || (rec.amount < 0 ? 'withdrawal' : 'investment');
+  } else {
+    $('#invModalTitle').textContent = 'Add Capital / Investment';
+    $('#invAmt').value = '';
+    $('#invDate').value = new Date().toISOString().slice(0, 10);
+    $('#invNote').value = '';
+    invCurrentType = 'investment';
+  }
+
+  $$('#invTypeSeg button').forEach(b => b.classList.toggle('on', b.dataset.type === invCurrentType));
+  $('#invAmtErr').classList.add('hidden');
+
+  const o = $('#invOvl');
+  o.classList.remove('hidden');
+  requestAnimationFrame(() => { o.classList.remove('closed'); $('#invForm').classList.remove('closed'); });
+  setTimeout(() => $('#invAmt').focus(), 250);
+}
+
+function closeInvestModal() {
+  const o = $('#invOvl');
+  o.classList.add('closed');
+  $('#invForm').classList.add('closed');
+  setTimeout(() => o.classList.add('hidden'), 250);
+  editingInv = null;
+}
+
+$('#invClose').onclick = $('#invCancel').onclick = closeInvestModal;
+$('#invOvl').addEventListener('mousedown', e => { if (e.target.id === 'invOvl') closeInvestModal(); });
+
+$$('#invTypeSeg button').forEach(btn => {
+  btn.onclick = () => {
+    $$('#invTypeSeg button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    invCurrentType = btn.dataset.type;
+  };
+});
+
+$('#invForm').onsubmit = e => {
+  e.preventDefault();
+  const rawAmt = parseFloat($('#invAmt').value);
+  if (!(rawAmt > 0) || !isFinite(rawAmt)) {
+    $('#invAmtErr').classList.remove('hidden');
+    return;
+  }
+  $('#invAmtErr').classList.add('hidden');
+
+  const pId = $('#invPort').value;
+  const dVal = $('#invDate').value || new Date().toISOString().slice(0, 10);
+  const note = $('#invNote').value.trim();
+  const finalAmt = invCurrentType === 'withdrawal' ? -Math.abs(rawAmt) : Math.abs(rawAmt);
+
+  const port = investments.portfolios[pId];
+  if (!port.investments) port.investments = [];
+
+  if (editingInv) {
+    const oldPort = investments.portfolios[editingInv.portId];
+    oldPort.investments = oldPort.investments.filter(x => x.id !== editingInv.id);
+    port.investments.push({
+      id: editingInv.id,
+      date: dVal,
+      amount: finalAmt,
+      type: invCurrentType,
+      note: note
+    });
+  } else {
+    port.investments.push({
+      id: uid(),
+      date: dVal,
+      amount: finalAmt,
+      type: invCurrentType,
+      note: note
+    });
+  }
+
+  persist();
+  closeInvestModal();
+  renderInvestments();
+  toast(editingInv ? 'Investment record updated' : 'Investment record added');
+};
+
+window.editInv = (portId, id) => openInvestModal(portId, id);
+window.deleteInv = async (portId, id) => {
+  if (!(await confirmYes('Delete Investment Record?', 'This capital transaction will be removed.', 'Delete'))) return;
+  const port = investments.portfolios[portId];
+  if (port) {
+    port.investments = (port.investments || []).filter(x => x.id !== id);
+    persist();
+    renderInvestments();
+    toast('Record deleted');
+  }
+};
+
+/* ==========================================================================
+   MODAL 2: ADD / EDIT DIVIDEND
+   ========================================================================== */
+function openDividendModal(portId, recId) {
+  editingDiv = recId ? { portId, id: recId } : null;
+  const pId = portId || (activePort === 'all' ? 'ktrades' : activePort);
+  $('#divPort').value = pId;
+
+  // Render ticker quick chips
+  const chipsHtml = POPULAR_TICKERS.map(sym => `
+    <button type="button" class="ticker-chip" data-sym="${sym}">${sym}</button>
+  `).join('');
+  $('#tickerQuickChips').innerHTML = chipsHtml;
+  $$('#tickerQuickChips button').forEach(b => {
+    b.onclick = () => {
+      $('#divSymbol').value = b.dataset.sym;
+      $$('#tickerQuickChips button').forEach(c => c.classList.remove('active'));
+      b.classList.add('active');
+    };
+  });
+
+  if (editingDiv) {
+    const port = investments.portfolios[portId];
+    const rec = (port.dividends || []).find(x => x.id === recId);
+    if (!rec) return;
+    $('#divModalTitle').textContent = 'Edit Dividend';
+    $('#divSymbol').value = rec.symbol || '';
+    $('#divAmt').value = rec.amount || '';
+    $('#divDate').value = rec.date ? rec.date.slice(0, 10) : '';
+    $('#divNote').value = rec.note || '';
+  } else {
+    $('#divModalTitle').textContent = 'Add Dividend Received';
+    $('#divSymbol').value = '';
+    $('#divAmt').value = '';
+    $('#divDate').value = new Date().toISOString().slice(0, 10);
+    $('#divNote').value = '';
+  }
+
+  $('#divSymbolErr').classList.add('hidden');
+  $('#divAmtErr').classList.add('hidden');
+
+  const o = $('#divOvl');
+  o.classList.remove('hidden');
+  requestAnimationFrame(() => { o.classList.remove('closed'); $('#divForm').classList.remove('closed'); });
+  setTimeout(() => $('#divSymbol').focus(), 250);
+}
+
+function closeDividendModal() {
+  const o = $('#divOvl');
+  o.classList.add('closed');
+  $('#divForm').classList.add('closed');
+  setTimeout(() => o.classList.add('hidden'), 250);
+  editingDiv = null;
+}
+
+$('#divClose').onclick = $('#divCancel').onclick = closeDividendModal;
+$('#divOvl').addEventListener('mousedown', e => { if (e.target.id === 'divOvl') closeDividendModal(); });
+
+$('#divForm').onsubmit = e => {
+  e.preventDefault();
+  const sym = $('#divSymbol').value.toUpperCase().trim();
+  const amt = parseFloat($('#divAmt').value);
+
+  if (!sym) {
+    $('#divSymbolErr').classList.remove('hidden');
+    return;
+  }
+  $('#divSymbolErr').classList.add('hidden');
+
+  if (!(amt > 0) || !isFinite(amt)) {
+    $('#divAmtErr').classList.remove('hidden');
+    return;
+  }
+  $('#divAmtErr').classList.add('hidden');
+
+  const pId = $('#divPort').value;
+  const dVal = $('#divDate').value || new Date().toISOString().slice(0, 10);
+  const note = $('#divNote').value.trim();
+
+  const port = investments.portfolios[pId];
+  if (!port.dividends) port.dividends = [];
+
+  if (editingDiv) {
+    const oldPort = investments.portfolios[editingDiv.portId];
+    oldPort.dividends = oldPort.dividends.filter(x => x.id !== editingDiv.id);
+    port.dividends.push({
+      id: editingDiv.id,
+      date: dVal,
+      symbol: sym,
+      amount: amt,
+      note: note
+    });
+  } else {
+    port.dividends.push({
+      id: uid(),
+      date: dVal,
+      symbol: sym,
+      amount: amt,
+      note: note
+    });
+  }
+
+  persist();
+  closeDividendModal();
+  renderInvestments();
+  toast(editingDiv ? 'Dividend updated' : 'Dividend added');
+};
+
+window.editDiv = (portId, id) => openDividendModal(portId, id);
+window.deleteDiv = async (portId, id) => {
+  if (!(await confirmYes('Delete Dividend Record?', 'This dividend credit will be removed.', 'Delete'))) return;
+  const port = investments.portfolios[portId];
+  if (port) {
+    port.dividends = (port.dividends || []).filter(x => x.id !== id);
+    persist();
+    renderInvestments();
+    toast('Dividend deleted');
+  }
+};
+
+/* ==========================================================================
+   MODAL 3: UPDATE PORTFOLIO WORTH (Broker App Margin Details)
+   ========================================================================== */
+function openWorthModal(portId) {
+  const pId = portId || (activePort === 'all' ? 'ktrades' : activePort);
+  $('#worthPort').value = pId;
+  const port = investments.portfolios[pId] || investments.portfolios.ktrades;
+  $('#worthAmt').value = port.currentWorth || '';
+  $('#worthNote').value = 'Checked from ' + port.broker + ' App';
+  $('#worthErr').classList.add('hidden');
+
+  updateWorthPreview();
+  const o = $('#worthOvl');
+  o.classList.remove('hidden');
+  requestAnimationFrame(() => { o.classList.remove('closed'); $('#worthForm').classList.remove('closed'); });
+  setTimeout(() => $('#worthAmt').focus(), 250);
+}
+
+function closeWorthModal() {
+  const o = $('#worthOvl');
+  o.classList.add('closed');
+  $('#worthForm').classList.add('closed');
+  setTimeout(() => o.classList.add('hidden'), 250);
+}
+
+$('#worthClose').onclick = $('#worthCancel').onclick = closeWorthModal;
+$('#worthOvl').addEventListener('mousedown', e => { if (e.target.id === 'worthOvl') closeWorthModal(); });
+
+function updateWorthPreview() {
+  const pId = $('#worthPort').value;
+  const val = parseFloat($('#worthAmt').value) || 0;
+  const m = calcPortfolioMetrics(pId);
+  const newCapGain = val - m.netInvestment;
+  const newTotProfit = m.totalDividends + newCapGain;
+
+  $('#prevNetInv').textContent = fmt(m.netInvestment);
+  const capEl = $('#prevCapGain');
+  capEl.textContent = (newCapGain >= 0 ? '+' : '') + fmt(newCapGain);
+  capEl.className = 'font-semibold ' + (newCapGain >= 0 ? 'text-emerald-600' : 'text-rose-600');
+  $('#prevDivs').textContent = fmt(m.totalDividends);
+  $('#prevTotProfit').textContent = (newTotProfit >= 0 ? '+' : '') + fmt(newTotProfit);
+}
+
+$('#worthPort').onchange = $('#worthAmt').oninput = updateWorthPreview;
+
+$('#worthForm').onsubmit = e => {
+  e.preventDefault();
+  const pId = $('#worthPort').value;
+  const val = parseFloat($('#worthAmt').value);
+  if (isNaN(val) || val < 0) {
+    $('#worthErr').classList.remove('hidden');
+    return;
+  }
+  $('#worthErr').classList.add('hidden');
+
+  const port = investments.portfolios[pId];
+  if (port) {
+    port.currentWorth = val;
+    port.worthUpdatedAt = new Date().toISOString();
+    if (!port.worthHistory) port.worthHistory = [];
+    port.worthHistory.push({
+      id: uid(),
+      date: port.worthUpdatedAt,
+      value: val,
+      note: $('#worthNote').value.trim() || 'Updated'
+    });
+    persist();
+    closeWorthModal();
+    renderInvestments();
+    toast(`Worth updated for ${port.name}: ${fmt(val)}`);
+  }
+};
+
+// Set default view on load
+if (activeMainTab === 'investment') {
+  switchMainTab('investment');
+}
+
 applyThemeBtn(); autoBackup(); renderAll(); setStatus();
 if (!APP_ID && !localStorage.getItem('finance_firebase_skip')) openSync();
 
