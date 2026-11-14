@@ -502,7 +502,7 @@ header.sticky { padding-top: max(0.625rem, env(safe-area-inset-top, 0.625rem)); 
           <h2 class="font-semibold text-sm">Dividends by Stock</h2>
           <span class="text-xs text-slate-400" id="ci1Subtitle">All Stocks</span>
         </div>
-        <div class="cvbox" style="height:19rem">
+        <div class="cvbox" style="height:25rem">
           <div class="cvscroll"><div class="cv"><canvas id="ci1"></canvas></div></div>
           <div id="ei1" class="empty hidden"></div>
         </div>
@@ -2926,10 +2926,10 @@ function donutWithCallouts(id, labels, vals, colors) {
   }
 
   const cx = w / 2;
-  const cy = h / 2;
+  const cy = Math.round(h * 0.54);
   const isCompact = w < 420;
   // Size outer radius with generous margin for radial callouts
-  const R = Math.min(isCompact ? w * 0.20 : w * 0.23, isCompact ? 64 : 76);
+  const R = Math.min(isCompact ? w * 0.19 : w * 0.22, isCompact ? 68 : 78);
   const r = R * 0.58;
   const midR = (R + r) / 2;
 
@@ -2988,22 +2988,43 @@ function donutWithCallouts(id, labels, vals, colors) {
   x.font = "bold 12px system-ui, sans-serif";
   x.fillText(kfmt(tot), cx, cy + 9);
 
-  // 3. Subtle Connector Lines & Exterior Labels (Radial Spoke Model - Mathematically Zero Crossings)
+  // 3. Subtle Connector Lines & Exterior Labels (Radial Spoke Model with Dynamic Anti-Overlap Spacing)
   const connectorColor = t.dark ? "rgba(148, 163, 184, 0.65)" : "rgba(100, 116, 139, 0.65)";
   const dotColor = t.dark ? "#94a3b8" : "#64748b";
 
+  // Separate into Left and Right lists
+  const leftSlices = displaySlices.filter(s => s.cosA < 0);
+  const rightSlices = displaySlices.filter(s => s.cosA >= 0);
+
+  // Sort left slices from bottom towards top (angle ascending: 180 -> 270)
+  leftSlices.sort((a, b) => a.midA - b.midA);
+
+  // Dynamic radial extension algorithm: guarantees at least 26px vertical space between adjacent labels
+  const minGap = 26;
+  let prevLeftY = null;
+  leftSlices.forEach(s => {
+    const baseRad = isCompact ? 16 : 20;
+    const natY = cy + s.sinA * (R + baseRad);
+    let rad = baseRad;
+    if (s.sinA < -0.15 && prevLeftY !== null) {
+      const reqY = Math.min(natY, prevLeftY - minGap);
+      const neededR = (reqY - cy) / s.sinA;
+      rad = Math.max(baseRad, neededR - R);
+    }
+    s.rad = Math.min(isCompact ? 80 : 98, Math.max(baseRad, rad));
+    s.p2y = cy + s.sinA * (R + s.rad);
+    prevLeftY = s.p2y;
+  });
+
+  // Right slices (e.g. POL)
+  rightSlices.forEach(s => {
+    s.rad = isCompact ? 16 : 22;
+  });
+
+  // Render all connectors and labels
   displaySlices.forEach(s => {
     const isRight = s.cosA >= 0;
-    const deg = ((s.midA * 180 / Math.PI) + 360) % 360;
-
-    // Base radial spoke extension
-    let rad = isCompact ? 16 : 20;
-
-    // For slices crowded in the top-left quadrant (deg between 210 and 270),
-    // fan out progressively so top labels never collide vertically
-    if (!isRight && deg > 210 && deg <= 270) {
-      rad += (deg - 210) * 1.15;
-    }
+    const rad = s.rad || (isCompact ? 16 : 20);
 
     // Point 1: Anchor dot on outer donut perimeter
     const p1x = cx + s.cosA * R;
@@ -3044,7 +3065,7 @@ function donutWithCallouts(id, labels, vals, colors) {
     x.fillText(s.label, textX, p3y - 6);
 
     // Line 2: Value and percentage in clean theme typography
-    x.font = "9px system-ui, sans-serif";
+    x.font = "9.5px system-ui, sans-serif";
     x.fillStyle = t.txt;
     x.fillText(`${kfmt(s.val)} (${s.pct.toFixed(1)}%)`, textX, p3y + 6);
   });
@@ -3052,7 +3073,7 @@ function donutWithCallouts(id, labels, vals, colors) {
   // 4. Hit Test for Tooltips
   c.cv._hit = (px, py) => {
     const dx = px - cx, dy = py - cy, d = Math.hypot(dx, dy);
-    if (d < r || d > R + 36) return null;
+    if (d < r || d > R + 45) return null;
     let a = Math.atan2(dy, dx);
     if (a < -Math.PI / 2) a += Math.PI * 2;
     const i = arcs.findIndex(s => a >= s[0] && a < s[1]);
@@ -3089,13 +3110,13 @@ function renderInvestmentCharts() {
     const stockVals = sortedStocks.map(s => divByStock[s]);
     donutWithCallouts('ci1', sortedStocks, stockVals, stockColors);
     $('#li1').innerHTML = `
-      <div class="flex flex-wrap gap-1.5 pt-1">
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
         ${sortedStocks.map((s, i) => `
-          <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs border border-slate-200 dark:border-slate-700/60">
-            <span class="w-2 h-2 rounded-full shrink-0" style="background:${stockColors[i]}"></span>
-            <span class="font-bold">${esc(s)}</span>
-            <span class="text-slate-600 dark:text-slate-300 font-medium">${fmt(stockVals[i])}</span>
-            <span class="text-[10px] text-slate-400">(${((stockVals[i] / totDivs) * 100).toFixed(1)}%)</span>
+          <div class="inline-flex items-center gap-1.5 py-0.5 text-xs">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${stockColors[i]}"></span>
+            <span class="font-bold" style="color:${stockColors[i]}">${esc(s)}</span>
+            <span class="text-slate-700 dark:text-slate-200 font-semibold">${fmt(stockVals[i])}</span>
+            <span class="text-[11px] text-slate-400 dark:text-slate-500 font-normal">(${((stockVals[i] / totDivs) * 100).toFixed(1)}%)</span>
           </div>
         `).join('')}
       </div>
